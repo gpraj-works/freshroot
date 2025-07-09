@@ -5,17 +5,20 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App.tsx'
-import { AppContextProvider } from './context/AppContextProvider.tsx'
 import './index.css'
 import theme from './theme.ts'
+import { Provider } from 'react-redux'
+import store from './store.ts'
+import { Toaster } from 'react-hot-toast'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <MantineProvider theme={theme} classNamesPrefix="Fresh">
       <BrowserRouter>
-        <AppContextProvider>
+        <Provider store={store}>
           <App />
-        </AppContextProvider>
+          <Toaster />
+        </Provider>
       </BrowserRouter>
     </MantineProvider>
   </StrictMode>

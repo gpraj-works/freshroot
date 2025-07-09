@@ -1,7 +1,8 @@
-import { ActionIcon, Badge, Button, Drawer, Group, Stack, useMantineTheme } from '@mantine/core'
+import { ActionIcon, Badge, Group, useMantineTheme } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import { RiShoppingCart2Line } from '@remixicon/react'
 import { type FC } from 'react'
+import Icon from '../shared/Icon'
+import CartMenu from '../CartMenu'
 
 interface CartButtonProps {
   count?: number
@@ -13,7 +14,7 @@ const CartButton: FC<CartButtonProps> = ({ count = 0 }) => {
     <>
       <Group justify="center" align="center" style={{ position: 'relative' }} onClick={toggle}>
         <ActionIcon size="lg" radius="xl" variant="transparent" color={theme.primaryColor}>
-          <RiShoppingCart2Line size={20} />
+          <Icon name='cart' size={20} />
         </ActionIcon>
         {count > 0 && (
           <Badge
@@ -31,20 +32,7 @@ const CartButton: FC<CartButtonProps> = ({ count = 0 }) => {
           </Badge>
         )}
       </Group>
-      <Drawer
-        opened={opened}
-        onClose={close}
-        title="Cart Items"
-        padding="md"
-        position="right"
-        size="xs"
-      >
-        <Stack gap="md">
-          <Button component="a" href="/cart">
-            Manage cart
-          </Button>
-        </Stack>
-      </Drawer>
+      <CartMenu opened={opened} close={close} />
     </>
   )
 }

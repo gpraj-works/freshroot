@@ -1,8 +1,8 @@
 import { Anchor, BackgroundImage, Button, Flex, Stack, Title, Box } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
-import { RiArrowRightLine } from '@remixicon/react'
 import { NavLink } from 'react-router-dom'
 import { LargeBanner, SmallBanner } from '../assets'
+import Icon from './shared/Icon'
 
 const HeroSection = () => {
   const isMobile = useMediaQuery('(max-width: 768px)')
@@ -31,7 +31,7 @@ const HeroSection = () => {
             Freshness that flows from pure roots to your plate
           </Title>
           <Flex gap={30} align="center" wrap="wrap-reverse">
-            <Button size="lg" {...(isMobile && { rightSection: <RiArrowRightLine /> })}>
+            <Button size="lg" {...(isMobile && { rightSection: <Icon name='arrow_right' /> })}>
               Purchase now
             </Button>
             {!isMobile && (
@@ -42,7 +42,7 @@ const HeroSection = () => {
                 size="lg"
                 style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}
               >
-                Explore products <RiArrowRightLine />
+                Explore products <Icon name='arrow_right' />
               </Anchor>
             )}
           </Flex>

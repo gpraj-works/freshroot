@@ -1,9 +1,11 @@
 import { Box, Title } from '@mantine/core'
 import { Carousel } from '@mantine/carousel'
-import Product, { type ProductProps } from './Product'
+import Product from './ui/Product'
 import PotatoImage from '../assets/products/potato.png'
+import useCart from '../hooks/useCart'
+import { type Product as ProductProps } from '../utils/types'
 
-const products: ProductProps[] = [
+const products = [
   {
     id: 'tozo80a4x18r6ngwhmg1',
     name: 'Potato 500g',
@@ -106,6 +108,8 @@ const products: ProductProps[] = [
 ]
 
 const BestSelling = () => {
+  const { handlers } = useCart()
+
   return (
     <Box py={20}>
       <Title order={2} mb={20}>
@@ -133,7 +137,10 @@ const BestSelling = () => {
       >
         {products.map((product) => (
           <Carousel.Slide key={product.id}>
-            <Product {...product} />
+            <Product
+              {...product}
+              addCart={(product: ProductProps) => handlers.addProduct(product)}
+            />
           </Carousel.Slide>
         ))}
       </Carousel>

@@ -15,12 +15,14 @@
     "@mantine/form": "^8.1.2",
     "@mantine/hooks": "^8.1.2",
     "@mantine/modals": "^8.1.2",
-    "@mantine/notifications": "^8.1.2",
+    "@reduxjs/toolkit": "^2.8.2",
     "@remixicon/react": "^4.6.0",
     "embla-carousel": "^8.5.2",
     "embla-carousel-react": "^8.5.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-hot-toast": "^2.5.2",
+    "react-redux": "^9.2.0",
     "react-router-dom": "6"
   },
   "devDependencies": {

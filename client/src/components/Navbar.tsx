@@ -14,12 +14,13 @@ import {
   Container,
 } from '@mantine/core'
 import { useDisclosure, useMediaQuery } from '@mantine/hooks'
-import { RiArrowRightLine, RiSearchLine } from '@remixicon/react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import Logo from '../assets/logo.svg'
-import { useAppContext } from '../hooks/useAppContext'
 import CartButton from './ui/CartButton'
 import ProfileMenu from './ui/ProfileMenu'
+import useUser from '../hooks/useUser'
+import useCart from '../hooks/useCart'
+import Icon from './shared/Icon'
 
 const pages = [
   { label: 'Home', link: '/' },
@@ -33,10 +34,10 @@ const ProductSearch = () => {
     <TextInput
       radius="xl"
       placeholder="Search products"
-      leftSection={<RiSearchLine size={16} />}
+      leftSection={<Icon name="search" size={16} />}
       rightSection={
         <ActionIcon size={28} radius="xl" color={theme.primaryColor} variant="filled">
-          <RiArrowRightLine size={16} />
+          <Icon name="arrow_right" size={16} />
         </ActionIcon>
       }
     />
@@ -47,21 +48,33 @@ const Navbar = () => {
   const [opened, { toggle, close }] = useDisclosure(false)
   const isMobile = useMediaQuery('(max-width: 768px)')
   const theme = useMantineTheme()
-  const { user, setUser, setShowUserLogin } = useAppContext()
   const navigate = useNavigate()
+  const { states: userStates, handlers: userHandlers } = useUser()
+  const { states: cartStates } = useCart()
 
   const logout = () => {
-    setUser(null)
+    userHandlers.logoutUser()
     navigate('/')
   }
 
   return (
-    <Box px="md" py="sm" style={{ borderBottom: '1px solid', borderColor: '#bedcbe' }}>
+    <Box
+      px="md"
+      py="sm"
+      pos="sticky"
+      top={0}
+      bg="white"
+      style={{
+        borderBottom: '1px solid',
+        borderColor: '#bedcbe',
+        zIndex: 9,
+      }}
+    >
       <Container size="xl">
         <Flex justify="space-between" align="center">
           <Flex align="center">
             <Image src={Logo} h={40} w="auto" />
-            <Anchor component={NavLink} to="/home" underline="never">
+            <Anchor component={NavLink} to="/" underline="never">
               <Title order={2} c="fresh.8" size="h2">
                 Freshroot
               </Title>
@@ -69,23 +82,31 @@ const Navbar = () => {
           </Flex>
 
           {!isMobile && (
-            <Group gap="lg" align="center">
+            <Group gap="md" align="center">
               {pages.map((page) => (
                 <Anchor key={page.link} component={NavLink} to={page.link} underline="never">
                   {page.label}
                 </Anchor>
               ))}
               <ProductSearch />
-              <CartButton count={2} />
-              <ProfileMenu user={user} showUserLogin={setShowUserLogin} logout={logout} />
+              <CartButton count={cartStates.productCount} />
+              <ProfileMenu
+                user={userStates.user}
+                showLogin={userHandlers.showLogin}
+                logout={logout}
+              />
             </Group>
           )}
 
           {isMobile && (
             <>
               <Flex gap={15} align="center">
-                <CartButton count={2} />
-                <ProfileMenu user={user} showUserLogin={setShowUserLogin} logout={logout} />
+                <CartButton count={cartStates.productCount} />
+                <ProfileMenu
+                  user={userStates.user}
+                  showLogin={userHandlers.showLogin}
+                  logout={logout}
+                />
                 <Burger opened={opened} onClick={toggle} color={theme.primaryColor} />
               </Flex>
               <Drawer

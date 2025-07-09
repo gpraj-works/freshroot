@@ -4,17 +4,13 @@ import { avatar } from '../../assets'
 
 interface ProfileMenuProps {
   user: object | null | boolean
-  showUserLogin: (isShow: boolean) => void
+  showLogin: (isShow: boolean) => void
   logout: () => void
 }
 
 const ProfileMenu: FC<ProfileMenuProps> = (props) => {
   if (!props.user) {
-    return (
-      <Button onClick={() => props.showUserLogin(true)}>
-        Login
-      </Button>
-    )
+    return <Button onClick={() => props.showLogin(true)}>Login</Button>
   }
 
   return (

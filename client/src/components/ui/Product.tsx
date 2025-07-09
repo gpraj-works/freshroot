@@ -1,7 +1,8 @@
 import { Paper, Text, Anchor, Image, Rating, Flex, Stack, Button } from '@mantine/core'
 import { NavLink } from 'react-router-dom'
 import type { FC } from 'react'
-import { RiShoppingCart2Line } from '@remixicon/react'
+import { type Product as ProductPropsType } from '../../utils/types'
+import Icon from '../shared/Icon'
 
 export interface ProductProps {
   id: string
@@ -13,10 +14,11 @@ export interface ProductProps {
   offerPrice?: number
   priceType: string
   rating: number
+  addCart: (product: ProductPropsType) => void
 }
 
 const Product: FC<ProductProps> = (props) => {
-  const { name, inStock, price, offerPrice, priceType } = props
+  const { name, inStock, price, offerPrice, priceType, addCart } = props
   const productLink = `/products/${props.id}`
   return (
     <Paper
@@ -62,7 +64,12 @@ const Product: FC<ProductProps> = (props) => {
               </Text>
             )}
           </Flex>
-          <Button leftSection={<RiShoppingCart2Line size={20} />} disabled={!inStock} size="xs">
+          <Button
+            leftSection={<Icon name='cart' size={20} />}
+            disabled={!inStock}
+            onClick={() => addCart({ id: props.id, quantity: 1 })}
+            size="xs"
+          >
             Add
           </Button>
         </Flex>
