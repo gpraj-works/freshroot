@@ -5,18 +5,20 @@ import { type Product } from '../utils/types'
 export interface StateProps {
   products: { id: string, quantity: number }[],
   productCount: number
+  showCart: boolean
 }
 
 const initialState: StateProps = {
   products: [],
-  productCount: 0
+  productCount: 0,
+  showCart: false
 }
 
 const cartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
-    addProduct: (state, action: PayloadAction<Product>) => {
+    addProduct: (state: StateProps, action: PayloadAction<Product>) => {
       const productIndex = state.products.findIndex(p => p.id === action.payload.id)
       if (productIndex === -1) {
         state.products.push(action.payload)
@@ -32,7 +34,7 @@ const cartSlice = createSlice({
       })
     },
 
-    removeProduct: (state, action: PayloadAction<string>) => {
+    removeProduct: (state: StateProps, action: PayloadAction<string>) => {
       const product = state.products.find(p => p.id === action.payload)
       if (product) {
         state.productCount -= product.quantity
@@ -46,7 +48,7 @@ const cartSlice = createSlice({
       }
     },
 
-    removeQuantity: (state, action: PayloadAction<string>) => {
+    removeQuantity: (state: StateProps, action: PayloadAction<string>) => {
       const productIndex = state.products.findIndex(p => p.id === action.payload)
       if (productIndex !== -1) {
         const product = state.products[productIndex]
@@ -57,6 +59,10 @@ const cartSlice = createSlice({
         }
         state.productCount = state.products.length
       }
+    },
+
+    toggleCart: (state: StateProps, action: PayloadAction<boolean>) => {
+      state.showCart = action.payload
     },
 
     clearCart: (state) => {

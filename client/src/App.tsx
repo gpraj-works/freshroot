@@ -7,6 +7,10 @@ import Contact from './pages/contact'
 import Home from './pages/home'
 import Products from './pages/products'
 import Footer from './components/Footer'
+import Login from './components/auth/Login'
+import Register from './components/auth/Registration'
+import ForgotPassword from './components/auth/ForgotPassword'
+import CartMenu from './components/CartMenu'
 
 function App() {
   return (
@@ -19,6 +23,10 @@ function App() {
         <Route path="/contact" element={<Contact />} />
       </Routes>
       <Footer />
+      <Login />
+      <Register />
+      <ForgotPassword />
+      <CartMenu />
     </Box>
   )
 }

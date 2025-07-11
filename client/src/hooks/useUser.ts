@@ -1,5 +1,5 @@
 import { useDispatch, useSelector, type TypedUseSelectorHook } from "react-redux"
-import { type StateProps, type User, userReducer } from "../features/userSlice"
+import { type StateProps, type User, userReducer, type AuthType } from "../features/userSlice"
 import { type RootState } from "../store"
 
 export const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector
@@ -10,9 +10,9 @@ const useUser = () => {
 
   const loginUser = (user: User) => dispatch(userReducer.loginUser(user))
   const logoutUser = () => dispatch(userReducer.logoutUser())
-  const showLogin = (isShow: boolean) => dispatch(userReducer.showLogin(isShow))
+  const toggleAuth = (authType: AuthType, isShow: boolean) => dispatch(userReducer.toggleAuth({ authType, isShow }))
 
-  return { states, handlers: { loginUser, logoutUser, showLogin } }
+  return { states, handlers: { loginUser, logoutUser, toggleAuth } }
 }
 
 export default useUser

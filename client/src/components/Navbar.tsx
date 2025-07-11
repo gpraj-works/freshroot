@@ -58,86 +58,88 @@ const Navbar = () => {
   }
 
   return (
-    <Box
-      px="md"
-      py="sm"
-      pos="sticky"
-      top={0}
-      bg="white"
-      style={{
-        borderBottom: '1px solid',
-        borderColor: '#bedcbe',
-        zIndex: 9,
-      }}
-    >
-      <Container size="xl">
-        <Flex justify="space-between" align="center">
-          <Flex align="center">
-            <Image src={Logo} h={40} w="auto" />
-            <Anchor component={NavLink} to="/" underline="never">
-              <Title order={2} c="fresh.8" size="h2">
-                Freshroot
-              </Title>
-            </Anchor>
-          </Flex>
+    <>
+      <Box
+        px="md"
+        py="sm"
+        pos="sticky"
+        top={0}
+        bg="white"
+        style={{
+          borderBottom: '1px solid',
+          borderColor: '#bedcbe',
+          zIndex: 9,
+        }}
+      >
+        <Container size="xl">
+          <Flex justify="space-between" align="center">
+            <Flex align="center">
+              <Image src={Logo} h={40} w="auto" />
+              <Anchor component={NavLink} to="/" underline="never">
+                <Title order={2} c="fresh.8" size="h2">
+                  Freshroot
+                </Title>
+              </Anchor>
+            </Flex>
 
-          {!isMobile && (
-            <Group gap="md" align="center">
-              {pages.map((page) => (
-                <Anchor key={page.link} component={NavLink} to={page.link} underline="never">
-                  {page.label}
-                </Anchor>
-              ))}
-              <ProductSearch />
-              <CartButton count={cartStates.productCount} />
-              <ProfileMenu
-                user={userStates.user}
-                showLogin={userHandlers.showLogin}
-                logout={logout}
-              />
-            </Group>
-          )}
-
-          {isMobile && (
-            <>
-              <Flex gap={15} align="center">
+            {!isMobile && (
+              <Group gap="md" align="center">
+                {pages.map((page) => (
+                  <Anchor key={page.link} component={NavLink} to={page.link} underline="never">
+                    {page.label}
+                  </Anchor>
+                ))}
+                <ProductSearch />
                 <CartButton count={cartStates.productCount} />
                 <ProfileMenu
                   user={userStates.user}
-                  showLogin={userHandlers.showLogin}
+                  showLogin={() => userHandlers.toggleAuth('login', true)}
                   logout={logout}
                 />
-                <Burger opened={opened} onClick={toggle} color={theme.primaryColor} />
-              </Flex>
-              <Drawer
-                opened={opened}
-                onClose={close}
-                title="Menu"
-                padding="md"
-                position="right"
-                size="xs"
-              >
-                <Stack gap="md">
-                  {pages.map((page) => (
-                    <Anchor
-                      key={page.link}
-                      component={NavLink}
-                      to={page.link}
-                      onClick={close}
-                      underline="never"
-                      size="md"
-                    >
-                      {page.label}
-                    </Anchor>
-                  ))}
-                  <ProductSearch />
-                </Stack>
-              </Drawer>
-            </>
-          )}
-        </Flex>
-      </Container>
-    </Box>
+              </Group>
+            )}
+
+            {isMobile && (
+              <>
+                <Flex gap={15} align="center">
+                  <CartButton count={cartStates.productCount} />
+                  <ProfileMenu
+                    user={userStates.user}
+                    showLogin={() => userHandlers.toggleAuth('login', true)}
+                    logout={logout}
+                  />
+                  <Burger opened={opened} onClick={toggle} color={theme.primaryColor} />
+                </Flex>
+                <Drawer
+                  opened={opened}
+                  onClose={close}
+                  title="Menu"
+                  padding="md"
+                  position="right"
+                  size="xs"
+                >
+                  <Stack gap="md">
+                    {pages.map((page) => (
+                      <Anchor
+                        key={page.link}
+                        component={NavLink}
+                        to={page.link}
+                        onClick={close}
+                        underline="never"
+                        size="md"
+                      >
+                        {page.label}
+                      </Anchor>
+                    ))}
+                    <ProductSearch />
+                  </Stack>
+                </Drawer>
+              </>
+            )}
+          </Flex>
+        </Container>
+      </Box>      
+    </>
   )
 }
 

@@ -1,21 +1,15 @@
 import { Drawer, Stack, Button, Flex } from '@mantine/core'
-import type { FC } from 'react'
 import useCart from '../hooks/useCart'
 import CartItem from './ui/CartItem'
 import Icon from './shared/Icon'
 
-interface CartMenuProps {
-  opened: boolean
-  close: () => void
-}
-
-const CartMenu: FC<CartMenuProps> = ({ opened, close }) => {
+const CartMenu = () => {
   const { states, handlers } = useCart()
-  const { addProduct, removeQuantity } = handlers
+  const { addProduct, removeQuantity, toggleCart } = handlers
   return (
     <Drawer
-      opened={opened}
-      onClose={close}
+      opened={states.showCart}
+      onClose={() => toggleCart(false)}
       title={`Cart Items (${states.productCount})`}
       padding="md"
       position="right"

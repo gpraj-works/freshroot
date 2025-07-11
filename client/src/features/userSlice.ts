@@ -7,16 +7,22 @@ export interface User {
   token: string
 }
 
+export type AuthType = "login" | "register" | "forgot"
+
 export interface StateProps {
   user: User | null
   isLoggedIn: boolean
   showLogin: boolean
+  showRegister: boolean
+  showForgot: boolean
 }
 
 const initialState: StateProps = {
   user: null,
   isLoggedIn: false,
-  showLogin: false
+  showLogin: false,
+  showRegister: false,
+  showForgot: false
 }
 
 const userSlice = createSlice({
@@ -30,8 +36,11 @@ const userSlice = createSlice({
     logoutUser: (state: StateProps) => {
       state.user = null
     },
-    showLogin: (state: StateProps, action: PayloadAction<boolean>) => {
-      state.showLogin = action.payload
+    toggleAuth: (state: StateProps, action: PayloadAction<{ authType: AuthType, isShow: boolean }>) => {
+      const { authType, isShow } = action.payload
+      state.showLogin = authType === "login" && isShow
+      state.showRegister = authType === "register" && isShow
+      state.showForgot = authType === "forgot" && isShow
     }
   },
 })

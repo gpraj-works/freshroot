@@ -2,6 +2,7 @@ import { Box, Grid, GridCol, Divider, Text, Image, Flex, Anchor, Title } from '@
 import { NavLink } from 'react-router-dom'
 import { Logo } from '../assets'
 import Icon from './shared/Icon'
+import dayjs from "dayjs"
 
 const quickLinks = [
   { name: 'Home', link: '/', icon: <Icon name="home" size={18} /> },
@@ -105,7 +106,7 @@ const Footer = () => {
       <Divider color="fresh.2" />
       <Box bg="#d0fae5" p={20}>
         <Text ta={{ base: 'left', lg: 'center' }} c="#0008">
-          © 2025 Freshroot. All rights reserved.
+          © {dayjs().year()} Freshroot. All rights reserved.
         </Text>
       </Box>
     </>

@@ -12,8 +12,9 @@ const useCart = () => {
   const addProduct = (product: Product) => dispatch(cartReducer.addProduct(product))
   const removeProduct = (id: string) => dispatch(cartReducer.removeProduct(id))
   const removeQuantity = (id: string) => dispatch(cartReducer.removeQuantity(id))
+  const toggleCart = (isShow: boolean) => dispatch(cartReducer.toggleCart(isShow))
 
-  return { states, handlers: { addProduct, removeProduct, removeQuantity } }
+  return { states, handlers: { addProduct, removeProduct, removeQuantity, toggleCart } }
 }
 
 export default useCart
