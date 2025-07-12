@@ -1,38 +1,39 @@
-import User from "../models/User"
-import { Response, Request } from "express"
-import { StatusCodes } from "http-status-codes"
 import bcrypt from "bcryptjs"
+import { StatusCodes } from "http-status-codes"
 import jwt from "jsonwebtoken"
 import { getEnv } from "../config"
-import dayjs from "dayjs"
+import User from "../models/User"
+import { HttpError } from "../utils/httpError"
 import { UserProps } from "../utils/types"
 
-export async function register(response: Response, user: UserProps) {
-  try {
-    // Check is user already exist
-    const isUserExist = await User.findOne({ email: user.email })
-    if (isUserExist) {
-      return response.json({
-        status: StatusCodes.CONFLICT,
-        message: "User already exist"
-      })
-    }
+export async function register(payload: UserProps) {
+  const isUserExist = await User.findOne({ email: payload.email })
 
-    // Prepare and insert user
-    const hashedPassword = await bcrypt.hash(user.password, 10)
-    const insertedUser = await User.create({ name: user.name, email: user.email, password: hashedPassword })
-    const token = jwt.sign({ id: insertedUser._id }, getEnv('TOKEN_SECRET'), { expiresIn: "7d" })
-
-    // Setup cookies for token
-    response.cookie('token', token, {
-      httpOnly: true,
-      secure: getEnv('NODE_ENV') === "production",
-      sameSite: getEnv('NODE_ENV') === "production" ? "none" : "strict",
-      expires: dayjs().add(7, 'day').toDate()
-    })
-    
-  } catch (error) {
-    const err = error as Error
-    throw new Error(err.message)
+  if (isUserExist) {
+    throw new HttpError(StatusCodes.CONFLICT, "User already exists")
   }
+
+  const hashedPassword = await bcrypt.hash(payload.password, 10)
+
+  await User.create({
+    name: payload.name,
+    email: payload.email,
+    password: hashedPassword,
+  })
+}
+
+export async function login(payload: UserProps): Promise<string> {
+  const user = await User.findOne({ email: payload.email })
+
+  if (!user) {
+    throw new HttpError(StatusCodes.NOT_FOUND, "User not found in given email")
+  }
+
+  const isPasswordMatched = await bcrypt.compare(payload.password, user.password)
+
+  if (!isPasswordMatched) {
+    throw new HttpError(StatusCodes.FORBIDDEN, "Given password is invalid")
+  }
+
+  return jwt.sign({ id: user._id }, getEnv("TOKEN_SECRET"), { expiresIn: "7d" })
 }

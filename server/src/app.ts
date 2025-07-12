@@ -3,7 +3,9 @@ import cors from "cors"
 import "dotenv/config"
 import express from 'express'
 import dbConnection from './config/dbConnection'
+import errorHandlerMiddleware from "./middlewares/errorHandlerMiddleware"
 import loggerMiddleware from './middlewares/loggerMiddleware'
+import userRoutes from "./routes/userRoutes"
 
 const app = express()
 const port = process.env.PORT || 3001
@@ -17,6 +19,10 @@ app.use(loggerMiddleware)
 app.get("/", function (request, response) {
   return response.json({ status: 200, message: "Welcome to freshroot!" })
 })
+
+app.use("/api/user", userRoutes)
+
+app.use(errorHandlerMiddleware)
 
 dbConnection().then(() => {
   app.listen(port, () => {

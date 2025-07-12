@@ -1,5 +1,5 @@
 export type UserProps = {
-  name: string
+  name?: string
   email: string
   password: string
   avatar?: string
