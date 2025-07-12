@@ -3,21 +3,26 @@ import { StatusCodes } from "http-status-codes"
 import * as userService from "../services/userService"
 import { getEnv } from "../config"
 import dayjs from "dayjs"
+import { HttpError } from "../utils/httpError"
 
 export async function register(request: Request, response: Response): Promise<Response> {
   try {
-    const { name, email, password } = request.body
+    const user = await userService.register(request.body)
 
-    await userService.register({ name, email, password })
+    if (!user.verified) {
+      return response.status(StatusCodes.CONTINUE).json({
+        message: "Email not verified. Continue to verification..."
+      })
+    }
 
     return response.status(StatusCodes.OK).json({
       message: "Registered successfully!"
     })
   } catch (error) {
-    const err = error as Error
-    console.error("userController/register error:", err.message)
+    const err = error as HttpError
+    console.error("userController/register error:", err)
 
-    return response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+    return response.status(err.status || StatusCodes.INTERNAL_SERVER_ERROR).json({
       message: err.message || "Unable to register. try again!"
     })
   }
@@ -25,9 +30,7 @@ export async function register(request: Request, response: Response): Promise<Re
 
 export async function login(request: Request, response: Response): Promise<Response> {
   try {
-    const { email, password } = request.body
-
-    const token = await userService.login({ email, password })
+    const token = await userService.login(request.body)
 
     response.cookie("token", token, {
       httpOnly: true,
@@ -41,11 +44,63 @@ export async function login(request: Request, response: Response): Promise<Respo
       token
     })
   } catch (error) {
-    const err = error as Error
+    const err = error as HttpError
     console.error("userController/login error:", err.message)
 
-    return response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+    return response.status(err.status || StatusCodes.INTERNAL_SERVER_ERROR).json({
       message: err.message || "Unable to login. Please try again!"
+    })
+  }
+}
+
+export async function proceedForgotPassword(request: Request, response: Response): Promise<Response> {
+  try {
+    await userService.proceedForgotPassword(request.body)
+
+    return response.status(StatusCodes.OK).json({
+      message: "Enter the OTP",
+    })
+  } catch (error) {
+    const err = error as HttpError
+    console.error("userController/proceedForgotPassword error:", err.message)
+
+    return response.status(err.status || StatusCodes.INTERNAL_SERVER_ERROR).json({
+      message: err.message || "Internal server error. Please try again!"
+    })
+  }
+}
+
+export async function forgotPassword(request: Request, response: Response): Promise<Response> {
+  try {
+    await userService.forgotPassword(request.body)
+
+    return response.status(StatusCodes.OK).json({
+      message: "Password updated successfully",
+    })
+  } catch (error) {
+    const err = error as HttpError
+    console.error("userController/forgotPassword error:", err.message)
+
+    return response.status(err.status || StatusCodes.INTERNAL_SERVER_ERROR).json({
+      message: err.message || "Unable to update password. Please try again!"
+    })
+  }
+}
+
+export async function emailVerification(request: Request, response: Response): Promise<Response> {
+  try {
+
+    await userService.emailVerification(request.body)
+
+    return response.status(StatusCodes.OK).json({
+      message: "Email verified successfully!",
+    })
+  } catch (error) {
+    const err = error as HttpError
+    console.error("userController/emailVerification error:", err.message)
+
+    return response.status(err.status || StatusCodes.INTERNAL_SERVER_ERROR).json({
+      message: err.message || "Unable to verify OTP. Please try again!"
     })
   }
 }
