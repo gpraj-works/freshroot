@@ -1,5 +1,4 @@
 import nodemailer from "nodemailer"
-import { getEnv } from "."
 import hbs from "nodemailer-express-handlebars"
 import path from "path"
 import dayjs from "dayjs"
@@ -8,11 +7,11 @@ const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
     type: "OAuth2",
-    user: getEnv("GOOGLE_ACCOUNT"),
-    clientId: getEnv("GOOGLE_CLIENT_ID"),
-    clientSecret: getEnv("GOOGLE_CLIENT_SECRET"),
-    accessToken: getEnv("GOOGLE_ACCESS_TOKEN"),
-    refreshToken: getEnv("GOOGLE_REFRESH_TOKEN"),
+    user: process.env.GOOGLE_ACCOUNT,
+    clientId: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    accessToken: process.env.GOOGLE_ACCESS_TOKEN,
+    refreshToken: process.env.GOOGLE_REFRESH_TOKEN,
   },
   tls: {
     rejectUnauthorized: true,
@@ -41,7 +40,7 @@ type SendMailProps = {
 
 async function sendEmail(props: SendMailProps) {
   const mailOptions = {
-    from: `"Freshroot" <${getEnv("GOOGLE_ACCOUNT")}>`,
+    from: `"Freshroot" <${process.env.GOOGLE_ACCOUNT}>`,
     to: props.to,
     subject: props.subject,
     template: props.template,

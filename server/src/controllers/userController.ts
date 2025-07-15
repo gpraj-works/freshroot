@@ -1,17 +1,16 @@
 import { Request, Response } from "express"
 import { StatusCodes } from "http-status-codes"
 import * as userService from "../services/userService"
-import { getEnv } from "../config"
 import dayjs from "dayjs"
 import { HttpError } from "../utils/httpError"
 
 export async function register(request: Request, response: Response): Promise<Response> {
   try {
-    const user = await userService.register(request.body)
+    const serviceResponse = await userService.register(request.body)
 
-    if (!user.verified) {
-      return response.status(StatusCodes.CONTINUE).json({
-        message: "Email not verified. Continue to verification..."
+    if (serviceResponse.isUpdated) {
+      return response.status(StatusCodes.FORBIDDEN).json({
+        message: "Email not verified. Continue to verification...",
       })
     }
 
@@ -32,16 +31,15 @@ export async function login(request: Request, response: Response): Promise<Respo
   try {
     const token = await userService.login(request.body)
 
-    response.cookie("token", token, {
+    response.cookie("userToken", token, {
       httpOnly: true,
-      secure: getEnv("NODE_ENV") === "production",
-      sameSite: getEnv("NODE_ENV") === "production" ? "none" : "strict",
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
       expires: dayjs().add(7, "days").toDate(),
     })
 
     return response.status(StatusCodes.OK).json({
-      message: "Logged in successfully!",
-      token
+      message: "Logged in successfully!"
     })
   } catch (error) {
     const err = error as HttpError
@@ -98,6 +96,49 @@ export async function emailVerification(request: Request, response: Response): P
   } catch (error) {
     const err = error as HttpError
     console.error("userController/emailVerification error:", err.message)
+
+    return response.status(err.status || StatusCodes.INTERNAL_SERVER_ERROR).json({
+      message: err.message || "Unable to verify OTP. Please try again!"
+    })
+  }
+}
+
+export async function getCurrentUser(request: Request, response: Response): Promise<Response> {
+  try {
+    const currentUser = await userService.getCurrentUser(request.body)
+
+    return response.status(StatusCodes.OK).json({
+      data: {
+        name: currentUser.name,
+        email: currentUser.email,
+        cartItems: currentUser.cartItems,
+        avatar: currentUser.avatar || null
+      }
+    })
+  } catch (error) {
+    const err = error as HttpError
+    console.error("userController/getCurrentUser error:", err.message)
+
+    return response.status(err.status || StatusCodes.INTERNAL_SERVER_ERROR).json({
+      message: err.message || "Unable to verify OTP. Please try again!"
+    })
+  }
+}
+
+export async function logout(request: Request, response: Response): Promise<Response> {
+  try {
+    response.clearCookie("userToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+    })
+
+    return response.status(StatusCodes.OK).json({
+      message: "Logged out successfully!",
+    })
+  } catch (error) {
+    const err = error as HttpError
+    console.error("userController/getCurrentUser error:", err.message)
 
     return response.status(err.status || StatusCodes.INTERNAL_SERVER_ERROR).json({
       message: err.message || "Unable to verify OTP. Please try again!"

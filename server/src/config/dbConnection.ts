@@ -1,9 +1,7 @@
 import mongoose from "mongoose"
-import { getEnv } from "."
-
 export default async function dbConnection() {
   try {
-    const connectionString = getEnv('CONNECTION_STRING')
+    const connectionString = process.env.CONNECTION_STRING
     mongoose.connection.on('connected', function () {
       console.log('✨ MongoDB connected')
     })

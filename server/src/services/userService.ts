@@ -1,17 +1,18 @@
 import bcrypt from "bcryptjs"
 import { StatusCodes } from "http-status-codes"
 import jwt from "jsonwebtoken"
-import { getEnv } from "../config"
 import { sendEmail } from "../config/nodemailer"
 import User from "../models/User"
 import { getOneTimePassword } from "../utils/helpers"
 import { HttpError } from "../utils/httpError"
 import dayjs from "dayjs"
 
-export async function register(payload: { name: string, email: string, password: string }): Promise<{ verified: boolean }> {
-  const isUserExist = await User.findOne({ email: payload.email })
+export async function register(payload: { name: string, email: string, password: string }): Promise<{ isUpdated: boolean }> {
+  const existingUser = await User.findOne({ email: payload.email })
 
-  if (isUserExist && isUserExist.verified) {
+  const isVerifiedUser = Boolean(existingUser?.verified)
+
+  if (existingUser && isVerifiedUser) {
     throw new HttpError(
       StatusCodes.CONFLICT,
       "User already exists"
@@ -48,6 +49,13 @@ export async function register(payload: { name: string, email: string, password:
     )
   }
 
+  if (existingUser && !isVerifiedUser) {
+    existingUser.otp = oneTimePassword
+    existingUser.otpExpiry = otpExpiry
+    await existingUser.save()
+    return { isUpdated: true }
+  }
+
   await User.create({
     name: payload.name,
     email: payload.email,
@@ -57,7 +65,7 @@ export async function register(payload: { name: string, email: string, password:
     verified: false,
   })
 
-  return { verified: isUserExist.verified }
+  return { isUpdated: false }
 }
 
 export async function login(payload: { email: string, password: string }): Promise<string> {
@@ -79,7 +87,7 @@ export async function login(payload: { email: string, password: string }): Promi
     )
   }
 
-  return jwt.sign({ id: user._id }, getEnv("TOKEN_SECRET"), { expiresIn: "7d" })
+  return jwt.sign({ id: user._id }, process.env.TOKEN_SECRET as string, { expiresIn: "7d" })
 }
 
 export async function proceedForgotPassword(payload: { email: string }) {
@@ -186,4 +194,17 @@ export async function emailVerification(payload: { email: string, otp: string })
   user.otpExpiry = undefined
 
   await user.save()
+}
+
+export async function getCurrentUser(payload: { id: string }) {
+  const user = await User.findOne({ _id: payload.id }).select("-password")
+
+  if (!user) {
+    throw new HttpError(
+      StatusCodes.BAD_REQUEST,
+      "Requested user not found!"
+    )
+  }
+
+  return user
 }

@@ -9,7 +9,7 @@ import userRoutes from "./routes/userRoutes"
 
 const app = express()
 const port = process.env.PORT || 3001
-const allowedOrigins = ["http://localhost:5173"]
+const allowedOrigins = ['http://localhost:5174']
 
 app.use(express.json())
 app.use(cookieParser())

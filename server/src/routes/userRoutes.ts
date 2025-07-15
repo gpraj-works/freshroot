@@ -2,6 +2,7 @@ import { Router } from "express"
 import * as userController from "../controllers/userController"
 import validationMiddleware from "../middlewares/validationMiddleware"
 import * as validate from "../validations/userValidator"
+import { authUser } from "../middlewares/authMiddleware"
 
 const userRoutes = Router()
 
@@ -19,11 +20,21 @@ userRoutes.post("/login",
 )
 userRoutes.post("/proceed-forgot-password",
   validationMiddleware(validate.proceedForgotPasswordProps),
-  userController.login
+  userController.proceedForgotPassword
 )
-userRoutes.post("/forgot-password",
+userRoutes.put("/forgot-password",
   validationMiddleware(validate.forgotPasswordProps),
-  userController.login
+  userController.forgotPassword
+)
+
+userRoutes.get("/current-user",
+  authUser,
+  userController.getCurrentUser
+)
+
+userRoutes.get("/logout",
+  authUser,
+  userController.logout
 )
 
 export default userRoutes
