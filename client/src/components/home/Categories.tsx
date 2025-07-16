@@ -1,5 +1,5 @@
 import { Paper, Box, Text, Anchor, Image, Title } from '@mantine/core'
-import { productCategories } from '../assets'
+import { productCategories } from '../../assets'
 import { NavLink } from 'react-router-dom'
 import type { FC } from 'react'
 import { Carousel } from '@mantine/carousel'

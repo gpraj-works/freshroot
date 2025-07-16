@@ -1,8 +1,8 @@
 import { Container } from '@mantine/core'
-import BestSelling from "../components/BestSelling"
-import Categories from '../components/Categories'
-import Hero from '../components/Hero'
-import WhyWe from '../components/WhyWe'
+import BestSelling from '../components/home/BestSelling'
+import Categories from '../components/home/Categories'
+import Hero from '../components/home/Hero'
+import WhyWe from '../components/home/WhyWe'
 import Newsletter from '../components/Newsletter'
 
 export default function Home() {

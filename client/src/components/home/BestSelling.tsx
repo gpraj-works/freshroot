@@ -1,9 +1,9 @@
 import { Box, Title } from '@mantine/core'
 import { Carousel } from '@mantine/carousel'
-import Product from './ui/Product'
-import PotatoImage from '../assets/products/potato.png'
-import useCart from '../hooks/useCart'
-import { type Product as ProductProps } from '../utils/types'
+import Product from '../ui/Product'
+import PotatoImage from '../../assets/products/onion.png'
+import useCart from '../../hooks/useCart'
+import { type Product as ProductProps } from '../../utils/types'
 
 const products = [
   {
@@ -140,6 +140,8 @@ const BestSelling = () => {
             <Product
               {...product}
               addCart={(product: ProductProps) => handlers.addProduct(product)}
+              gradientBackground={true}
+              gradientColor='#ffe2e2'
             />
           </Carousel.Slide>
         ))}

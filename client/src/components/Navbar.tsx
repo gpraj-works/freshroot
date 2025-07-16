@@ -73,7 +73,7 @@ const Navbar = () => {
       >
         <Container size="xl">
           <Flex justify="space-between" align="center">
-            <Flex align="center">
+            <Flex align="center" gap={5}>
               <Image src={Logo} h={40} w="auto" />
               <Anchor component={NavLink} to="/" underline="never">
                 <Title order={2} c="fresh.8" size="h2">
@@ -85,7 +85,7 @@ const Navbar = () => {
             {!isMobile && (
               <Group gap="md" align="center">
                 {pages.map((page) => (
-                  <Anchor key={page.link} component={NavLink} to={page.link} underline="never">
+                  <Anchor key={page.link} component={NavLink} to={page.link} underline="never" c="gray.8">
                     {page.label}
                   </Anchor>
                 ))}
@@ -127,6 +127,7 @@ const Navbar = () => {
                         onClick={close}
                         underline="never"
                         size="md"
+                        c="gray.8"
                       >
                         {page.label}
                       </Anchor>

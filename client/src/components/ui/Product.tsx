@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom'
 import type { FC } from 'react'
 import { type Product as ProductPropsType } from '../../utils/types'
 import Icon from '../shared/Icon'
+import { generateGradient } from '../../utils/helpers'
 
 export interface ProductProps {
   id: string
@@ -15,23 +16,31 @@ export interface ProductProps {
   priceType: string
   rating: number
   addCart: (product: ProductPropsType) => void
+  gradientBackground?: boolean
+  gradientColor?: string
 }
 
 const Product: FC<ProductProps> = (props) => {
-  const { name, inStock, price, offerPrice, priceType, addCart } = props
+  const { name, inStock, price, offerPrice, priceType, addCart, gradientBackground = false } = props
   const productLink = `/products/${props.id}`
   return (
     <Paper
-      w={250}
+      w={235}
       px={20}
       pb={20}
       radius="md"
       shadow="md"
       withBorder
-      style={{ userSelect: 'none' }}
+      style={{
+        userSelect: 'none',
+        ...(gradientBackground &&
+          props.gradientColor && { background: generateGradient(props.gradientColor) }),
+      }}
     >
       <Anchor component={NavLink} to={productLink} underline="never">
-        <Image src={props.thumbnail} alt={name} />
+        <Flex justify="center" align="center" h={150}>
+          <Image src={props.thumbnail} alt={name} w={160} />
+        </Flex>
       </Anchor>
 
       <Stack gap={0} mt="sm">
@@ -65,7 +74,7 @@ const Product: FC<ProductProps> = (props) => {
             )}
           </Flex>
           <Button
-            leftSection={<Icon name='cart' size={20} />}
+            leftSection={<Icon name="cart" size={20} />}
             disabled={!inStock}
             onClick={() => addCart({ id: props.id, quantity: 1 })}
             size="xs"

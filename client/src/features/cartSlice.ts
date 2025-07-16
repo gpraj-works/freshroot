@@ -57,7 +57,7 @@ const cartSlice = createSlice({
         } else {
           state.products.splice(productIndex, 1)
         }
-        state.productCount = state.products.length
+        state.productCount -= 1
       }
     },
 

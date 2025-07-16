@@ -28,7 +28,7 @@ const CartItem: FC<CartItemProps> = (props) => {
             tt="capitalize"
             style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}
           >
-            <span>500g</span>
+            <span>₹20</span>
             <span style={{ paddingTop: 7 }}>
               <Icon name="close" size={14} />
             </span>
@@ -40,6 +40,7 @@ const CartItem: FC<CartItemProps> = (props) => {
             <Button
               variant="outline"
               size="compact-xs"
+              color='red'
               fz={16}
               onClick={() => removeQuantity(productId, quantity)}
             >

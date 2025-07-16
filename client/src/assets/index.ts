@@ -1,4 +1,5 @@
 import Logo from "./logo.svg"
+import LogoWhite from "./logo-white.svg"
 
 import Avatar_1 from "./avatar/667e2cfc.svg"
 import Avatar_2 from "./avatar/c494b1fd.svg"
@@ -57,6 +58,7 @@ const productCategories = {
 
 export {
   Logo,
+  LogoWhite,
   avatar, productCategories,
   LargeBanner, SmallBanner, WhyWeBanner,
   FastDeliveryIcon, DoorDeliveryIcon, SafeParcelIcon, CustomerCareIcon

@@ -1,8 +1,8 @@
 import { Anchor, BackgroundImage, Button, Flex, Stack, Title, Box } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { NavLink } from 'react-router-dom'
-import { LargeBanner, SmallBanner } from '../assets'
-import Icon from './shared/Icon'
+import { LargeBanner, SmallBanner } from '../../assets'
+import Icon from '../shared/Icon'
 
 const HeroSection = () => {
   const isMobile = useMediaQuery('(max-width: 768px)')

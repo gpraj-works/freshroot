@@ -5,7 +5,7 @@ import {
   SafeParcelIcon,
   CustomerCareIcon,
   DoorDeliveryIcon,
-} from '../assets'
+} from '../../assets'
 
 const WhyWe = () => {
   return (

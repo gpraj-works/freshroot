@@ -10,13 +10,17 @@ import theme from './theme.ts'
 import { Provider } from 'react-redux'
 import store from './store.ts'
 import { Toaster } from 'react-hot-toast'
+import { SWRConfig } from 'swr'
+import { SWREventConfig } from './utils/apiRequest.ts'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <MantineProvider theme={theme} classNamesPrefix="Fresh">
       <BrowserRouter>
         <Provider store={store}>
-          <App />
+          <SWRConfig value={SWREventConfig}>
+            <App />
+          </SWRConfig>
           <Toaster />
         </Provider>
       </BrowserRouter>

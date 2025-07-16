@@ -1,8 +1,8 @@
 import { Box, Grid, GridCol, Divider, Text, Image, Flex, Anchor, Title } from '@mantine/core'
 import { NavLink } from 'react-router-dom'
-import { Logo } from '../assets'
+import { LogoWhite } from '../assets'
 import Icon from './shared/Icon'
-import dayjs from "dayjs"
+import dayjs from 'dayjs'
 
 const quickLinks = [
   { name: 'Home', link: '/', icon: <Icon name="home" size={18} /> },
@@ -27,20 +27,20 @@ const followUs = [
 
 const Footer = () => {
   return (
-    <>
-      <Box bg="#d0fae5" py={20} px={{ base: 20, lg: 60 }} mt={20}>
+    <Box>
+      <Box bg="fresh.8" py={20} px={{ base: 20, lg: 60 }} mt={20}>
         <Grid>
           <GridCol span={{ base: 12, lg: 6 }}>
-            <Flex align="center">
-              <Image src={Logo} h={45} w="auto" />
+            <Flex align="center" gap={5}>
+              <Image src={LogoWhite} h={40} w="auto" />
               <Anchor component={NavLink} to="/home" underline="never">
-                <Title order={2} c="fresh.8" size="h1">
+                <Title order={2} c="white" size="h1">
                   Freshroot
                 </Title>
               </Anchor>
             </Flex>
             <Box w={{ base: 'auto', lg: 560 }} mt={10} px={10}>
-              <Text>
+              <Text c="white">
                 Stay connected with us for the latest updates, special offers, and customer support.
                 Follow us on social media, subscribe to our newsletter for exclusive content, and
                 feel free to reach out—we’re always here to help.
@@ -48,7 +48,7 @@ const Footer = () => {
             </Box>
           </GridCol>
           <GridCol span={{ base: 12, lg: 2 }}>
-            <Title order={4} mb={10}>
+            <Title c="white" order={4} mb={10}>
               Quick Links
             </Title>
             {quickLinks.map((quickLink) => (
@@ -58,6 +58,7 @@ const Footer = () => {
                   to={quickLink.link}
                   underline="never"
                   style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
+                  c="white"
                 >
                   {quickLink.icon}
                   <span>{quickLink.name}</span>
@@ -66,16 +67,17 @@ const Footer = () => {
             ))}
           </GridCol>
           <GridCol span={{ base: 12, lg: 2 }}>
-            <Title order={4} mb={10}>
+            <Title c="white" order={4} mb={10}>
               Need Help?
             </Title>
             {needHelp.map((helpLink) => (
-              <Text c="fresh.9" key={helpLink.name}>
+              <Text key={helpLink.name}>
                 <Anchor
                   component={NavLink}
                   to={helpLink.link}
                   underline="never"
                   style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
+                  c="white"
                 >
                   {helpLink.icon}
                   <span>{helpLink.name}</span>
@@ -84,16 +86,17 @@ const Footer = () => {
             ))}
           </GridCol>
           <GridCol span={{ base: 12, lg: 2 }}>
-            <Title order={4} mb={10}>
+            <Title c="white" order={4} mb={10}>
               Follow Us
             </Title>
             {followUs.map((followLink) => (
-              <Text c="fresh.9" key={followLink.name}>
+              <Text key={followLink.name}>
                 <Anchor
                   component={NavLink}
                   to={followLink.link}
                   underline="never"
                   style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
+                  c="white"
                 >
                   {followLink.icon}
                   <span>{followLink.name}</span>
@@ -103,13 +106,12 @@ const Footer = () => {
           </GridCol>
         </Grid>
       </Box>
-      <Divider color="fresh.2" />
-      <Box bg="#d0fae5" p={20}>
-        <Text ta={{ base: 'left', lg: 'center' }} c="#0008">
+      <Box bg="fresh.9" p={10}>
+        <Text ta={{ base: 'left', lg: 'center' }} c="white">
           © {dayjs().year()} Freshroot. All rights reserved.
         </Text>
       </Box>
-    </>
+    </Box>
   )
 }
 
