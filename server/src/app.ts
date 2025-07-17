@@ -6,6 +6,7 @@ import dbConnection from './config/dbConnection'
 import errorHandlerMiddleware from "./middlewares/errorHandlerMiddleware"
 import loggerMiddleware from './middlewares/loggerMiddleware'
 import userRoutes from "./routes/userRoutes"
+import productRoutes from "./routes/productRoutes"
 
 const app = express()
 const port = process.env.PORT || 3001
@@ -22,6 +23,7 @@ app.get("/", function (request, response) {
 })
 
 app.use("/api/user", userRoutes)
+app.use("/api/product", productRoutes)
 
 app.use(errorHandlerMiddleware)
 
