@@ -65,7 +65,7 @@ const Register = () => {
             key={form.key('password')}
             {...form.getInputProps('password')}
           />
-          <Text size="sm">
+          <Text size="sm" my={5}>
             Already have account? &nbsp;
             <Anchor onClick={() => handlers.toggleAuth('login', true)}>click here</Anchor>
           </Text>

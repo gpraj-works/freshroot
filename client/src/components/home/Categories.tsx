@@ -14,55 +14,55 @@ interface CategoryProps {
 const categories: CategoryProps[] = [
   {
     title: 'Vegetables',
-    link: '/categories/vegetables',
+    link: 'products/vegetables',
     thumbnail: productCategories.vegetables,
     background: '#ffe2e2',
   },
   {
     title: 'Leafy Greens',
-    link: '/categories/leafy-greens',
+    link: 'products/leafy-greens',
     thumbnail: productCategories.leafyGreens,
     background: '#b9f8cf',
   },
   {
     title: 'Grains',
-    link: '/categories/grains',
+    link: 'products/grains',
     thumbnail: productCategories.grains,
     background: '#fef9c2',
   },
   {
     title: 'Fruits',
-    link: '/categories/fruits',
+    link: 'products/fruits',
     thumbnail: productCategories.fruits,
     background: '#e4e4e7',
   },
   {
     title: 'Drinks',
-    link: '/categories/drinks',
+    link: 'products/drinks',
     thumbnail: productCategories.drinks,
     background: '#ffe2e2',
   },
   {
     title: 'Dairies',
-    link: '/categories/dairies',
+    link: 'products/dairies',
     thumbnail: productCategories.dairies,
     background: '#ffedd4',
   },
   {
     title: 'Dry Fruits & Nuts',
-    link: '/categories/dry-fruits-nuts',
+    link: 'products/dry-fruits-nuts',
     thumbnail: productCategories.dryFruitsNuts,
     background: '#fef3c6',
   },
   {
     title: 'Honey',
-    link: '/categories/honey',
+    link: 'products/honey',
     thumbnail: productCategories.honey,
     background: '#e4e4e7',
   },
   {
     title: 'Mushroom',
-    link: '/categories/mushroom',
+    link: 'products/mushroom',
     thumbnail: productCategories.mushroom,
     background: '#fefce8',
   },
@@ -73,7 +73,7 @@ const Category: FC<CategoryProps> = ({ title, link, thumbnail, background }) => 
     <Anchor component={NavLink} to={link} underline="never" style={{ userSelect: 'none' }}>
       <Paper bg={background} w={180} p={20} radius="sm" shadow="md">
         <Image src={thumbnail} alt={title} />
-        <Text ta="center" size="md" c="black" mt="sm">
+        <Text ta="center" fw={500} size="md" c="black" mt="sm">
           {title}
         </Text>
       </Paper>

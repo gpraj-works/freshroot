@@ -15,7 +15,7 @@ const fresh: MantineColorsTuple = [
 ]
 
 const theme = createTheme({
-  fontFamily: 'Amaranth, sans-serif',
+  fontFamily: 'Poppins, sans-serif',
   white: "#FFFDF6",
   black: "#2C3930",
   colors: {

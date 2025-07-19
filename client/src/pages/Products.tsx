@@ -1,11 +1,11 @@
-import { Box, Title } from '@mantine/core'
-import { Carousel } from '@mantine/carousel'
-import ProductCard from '../ui/ProductCard'
-import PotatoImage from '../../assets/products/onion.png'
-import useCart from '../../hooks/useCart'
-import { type ProductProps } from '../../utils/types'
+import ProductCard from '../components/ui/ProductCard'
+import PotatoImage from '../assets/products/potato.png'
+import { Container, Grid, GridCol, Title, NavLink, Pagination, Paper, Stack } from '@mantine/core'
+import useCart from '../hooks/useCart'
+import { type ProductProps } from '../utils/types'
+import Breadcrumbs from '../components/ui/Breadcrumbs'
 
-const products:ProductProps[] = [
+const products: ProductProps[] = [
   {
     id: 'tozo80a4x18r6ngwhmg1',
     name: 'Potato 500g',
@@ -107,47 +107,46 @@ const products:ProductProps[] = [
   },
 ]
 
-const BestSelling = () => {
+const breadcrumbItems = [
+  { label: 'Home', link: '/' },
+  { label: 'Products', link: '/products' },
+]
+
+const Products = () => {
   const { handlers } = useCart()
-
   return (
-    <Box py={20}>
-      <Title order={2} mb={20}>
-        Best Selling
-      </Title>
-
-      <Carousel
-        slideSize="auto"
-        height="auto"
-        slideGap="lg"
-        controlSize={30}
-        withControls
-        withIndicators={false}
-        emblaOptions={{
-          loop: false,
-          dragFree: false,
-        }}
-        styles={{
-          control: {
-            backgroundColor: 'transparent',
-            border: 'none',
-            boxShadow: 'none',
-          },
-        }}
-      >
-        {products.map((product) => (
-          <Carousel.Slide key={product.id}>
-            <ProductCard
-              product={product}
-              addCart={(product) => handlers.addProduct(product)}
-              gradientBackground={true}
-              gradientColor='#ffe2e2'
-            />
-          </Carousel.Slide>
-        ))}
-      </Carousel>
-    </Box>
+    <Container size="xl" my={20} py={30} mih={450}>
+      <Stack mb={30}>
+        <Title order={2} tt="uppercase" c="gray.8">
+          All Products
+        </Title>
+        <Breadcrumbs items={breadcrumbItems} />
+      </Stack>
+      <Grid>
+        <GridCol span="auto">
+          <Grid gutter={20}>
+            {products.map((product) => (
+              <GridCol span={3} key={product.id}>
+                <ProductCard product={product} addCart={(product) => handlers.addProduct(product)} />
+              </GridCol>
+            ))}
+          </Grid>
+        </GridCol>
+        <GridCol span={2}>
+          <Paper shadow="md" pos="sticky" top={90}>
+            <NavLink w="auto" label="Vegetables" href="#required-for-focus" active />
+            <NavLink w="auto" label="Fruits" href="#required-for-focus" />
+            <NavLink w="auto" label="Grains" href="#required-for-focus" />
+            <NavLink w="auto" label="Juice" href="#required-for-focus" />
+            <NavLink w="auto" label="Dairies" href="#required-for-focus" />
+            <NavLink w="auto" label="Dry fruits & Nuts" href="#required-for-focus" />
+            <NavLink w="auto" label="Honey" href="#required-for-focus" />
+          </Paper>
+        </GridCol>
+      </Grid>
+      <Pagination total={10} withEdges mt={40} />
+    </Container>
   )
 }
 
-export default BestSelling
+export default Products

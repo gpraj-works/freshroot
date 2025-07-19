@@ -57,7 +57,7 @@ const Login = () => {
             key={form.key('password')}
             {...form.getInputProps('password')}
           />
-          <Text size="sm">
+          <Text size="sm" my={5}>
             Create an account? <Anchor onClick={() => handlers.toggleAuth('register', true)}>click here</Anchor>
           </Text>
           <Flex gap={10}>
@@ -69,7 +69,7 @@ const Login = () => {
             </Button>
           </Flex>
         </Stack>
-        <Text size="sm" ta="center" mt={12}>
+        <Text size="sm" ta="center" mt={17}>
           Forgot password? <Anchor onClick={() => handlers.toggleAuth('forgot', true)}>click here</Anchor>
         </Text>
       </Box>

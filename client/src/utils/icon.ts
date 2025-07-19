@@ -1,4 +1,4 @@
-import { RiFacebookCircleLine, RiInstagramLine, RiTwitchLine, RiHome4Line, RiYoutubeLine, RiBarChart2Line, RiMailSendLine, RiDiscountPercentLine, RiTruckLine, RiBankCardLine, RiLockLine, RiReplay10Line, RiArrowRightLine, RiArrowLeftLine, RiSearchLine, RiShoppingCart2Line, RiCheckboxCircleFill, RiCloseLine, RiAddLine, RiSubtractLine, RiCloseCircleFill, RiDeleteBinLine } from "@remixicon/react"
+import { RiFacebookCircleLine, RiInstagramLine, RiTwitchLine, RiHome4Line, RiYoutubeLine, RiBarChart2Line, RiMailSendLine, RiDiscountPercentLine, RiTruckLine, RiBankCardLine, RiLockLine, RiReplay10Line, RiArrowRightLine, RiArrowLeftLine, RiSearchLine, RiShoppingCart2Line, RiCheckboxCircleFill, RiCheckboxCircleLine, RiCloseLine, RiAddLine, RiSubtractLine, RiCloseCircleFill, RiDeleteBinLine, RiEdit2Line, RiArrowRightDoubleLine, RiCloseCircleLine, RiStore2Line, RiMapPin2Line } from "@remixicon/react"
 
 const icons = {
   home: RiHome4Line,
@@ -18,11 +18,18 @@ const icons = {
   search: RiSearchLine,
   cart: RiShoppingCart2Line,
   success: RiCheckboxCircleFill,
+  success_line: RiCheckboxCircleLine,
+  cancel: RiCloseCircleFill,
+  cancel_line: RiCloseCircleLine,
   error: RiCloseCircleFill,
   close: RiCloseLine,
   add: RiAddLine,
   trash_can: RiDeleteBinLine,
-  subtract: RiSubtractLine
+  subtract: RiSubtractLine,
+  edit: RiEdit2Line,
+  breadcrumb_next: RiArrowRightDoubleLine,
+  store: RiStore2Line,
+  location: RiMapPin2Line
 }
 
 export default icons

@@ -1,7 +1,8 @@
-import { Button, Container, Grid, GridCol, Paper } from '@mantine/core'
-import ManageCart from '../components/cart/ManageCart'
-import Icon from '../components/shared/Icon'
+import { Button, Container, Grid, GridCol } from '@mantine/core'
 import { Link } from 'react-router-dom'
+import ManageCart from '../components/cart/ManageCart'
+import OrderSummary from '../components/cart/OrderSummary'
+import Icon from '../components/shared/Icon'
 
 export default function Cart() {
   return (
@@ -11,11 +12,7 @@ export default function Cart() {
           <ManageCart />
         </GridCol>
         <GridCol span={4}>
-          <Paper bg="#f5f5f5" radius="sm" p={20} pos="sticky" top={100}>
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Corrupti at debitis in dolorem
-            nam itaque temporibus, doloremque distinctio ex sapiente expedita aspernatur veritatis
-            esse ad, voluptatum iusto consequuntur eos natus.
-          </Paper>
+          <OrderSummary />
         </GridCol>
       </Grid>
       <Button

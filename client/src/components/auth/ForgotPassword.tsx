@@ -48,7 +48,7 @@ const ForgotPassword = () => {
             key={form.key('email')}
             {...form.getInputProps('email')}
           />
-          <Text size="sm">
+          <Text size="sm" my={5}>
             Back to login?
             <Anchor onClick={() => handlers.toggleAuth('login', true)}> click here</Anchor>
           </Text>

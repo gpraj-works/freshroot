@@ -1,32 +1,32 @@
 import { Box } from '@mantine/core'
 import { Route, Routes } from 'react-router-dom'
 import './App.css'
-import Navbar from './components/Navbar'
-import Cart from './pages/cart'
-import Contact from './pages/contact'
-import Home from './pages/home'
-import Products from './pages/products'
-import Footer from './components/Footer'
-import Login from './components/auth/Login'
-import Register from './components/auth/Registration'
-import ForgotPassword from './components/auth/ForgotPassword'
-import CartMenu from './components/CartMenu'
+import Store from './layouts/Store'
+import StoreFront from './layouts/Storefront'
+import Cart from './pages/Cart'
+import Contact from './pages/Contact'
+import DeliveryAddress from './pages/DeliveryAddress'
+import Home from './pages/Home'
+import NotFound from './pages/NotFound'
+import Products from './pages/Products'
+import Product from './pages/Product'
 
 function App() {
   return (
     <Box>
-      <Navbar />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/contact" element={<Contact />} />
+        <Route element={<StoreFront />}>
+          <Route index element={<Home />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/products/:category" element={<Products />} />
+          <Route path="/products/:category/:id" element={<Product />} />
+          <Route path="/delivery-address" element={<DeliveryAddress />} />
+          <Route path="/contact" element={<Contact />} />
+        </Route>
+        <Route path="/seller/*" element={<Store />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
-      <Footer />
-      <Login />
-      <Register />
-      <ForgotPassword />
-      <CartMenu />
     </Box>
   )
 }

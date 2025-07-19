@@ -1,31 +1,24 @@
 import { Paper, Text, Anchor, Image, Rating, Flex, Stack, Button } from '@mantine/core'
 import { NavLink } from 'react-router-dom'
 import type { FC } from 'react'
-import { type Product as ProductPropsType } from '../../utils/types'
+import { type ProductProps } from '../../utils/types'
 import Icon from '../shared/Icon'
 import { generateGradient } from '../../utils/helpers'
 
-export interface ProductProps {
-  id: string
-  name: string
-  category: string
-  thumbnail: string
-  inStock: boolean
-  price: number
-  offerPrice?: number
-  priceType: string
-  rating: number
-  addCart: (product: ProductPropsType) => void
+export interface ProductCardProps {
+  product: ProductProps
+  addCart: (product: { id: string; quantity: number }) => void
   gradientBackground?: boolean
   gradientColor?: string
 }
 
-const Product: FC<ProductProps> = (props) => {
-  const { name, inStock, price, offerPrice, priceType, addCart, gradientBackground = false } = props
-  const productLink = `/products/${props.id}`
+const ProductCard: FC<ProductCardProps> = (props) => {
+  const { product, addCart, gradientBackground = false } = props
+  const { name, inStock, price, offerPrice, priceType } = product
+  const productLink = `/products/${product.category}/${product.id}`
   return (
     <Paper
-      w={235}
+      miw={200}
       px={20}
       pb={20}
       radius="md"
@@ -38,15 +31,15 @@ const Product: FC<ProductProps> = (props) => {
       }}
     >
       <Anchor component={NavLink} to={productLink} underline="never">
-        <Flex justify="center" align="center" h={150}>
-          <Image src={props.thumbnail} alt={name} w={160} />
+        <Flex justify="center" align="center">
+          <Image src={product.thumbnail} alt={name} w={170} />
         </Flex>
       </Anchor>
 
       <Stack gap={0} mt="sm">
-        <Anchor component={NavLink} to={`/products/${props.category}`} underline="never">
+        <Anchor component={NavLink} to={productLink} underline="never">
           <Text size="sm" c="#79716b" tt="capitalize">
-            {props.category}
+            {product.category}
           </Text>
         </Anchor>
         <Anchor component={NavLink} to={productLink} underline="never">
@@ -54,7 +47,7 @@ const Product: FC<ProductProps> = (props) => {
             {name}
           </Text>
         </Anchor>
-        <Rating value={props.rating} size="xs" fractions={2} readOnly mt={5} />
+        <Rating value={product.rating} size="xs" fractions={2} readOnly mt={5} />
 
         <Text size="sm" mt={5} c={inStock ? 'green' : 'red'}>
           {inStock ? 'In stock' : 'Out of stock'}
@@ -76,7 +69,7 @@ const Product: FC<ProductProps> = (props) => {
           <Button
             leftSection={<Icon name="cart" size={20} />}
             disabled={!inStock}
-            onClick={() => addCart({ id: props.id, quantity: 1 })}
+            onClick={() => addCart({ id: product.id, quantity: 1 })}
             size="xs"
           >
             Add
@@ -87,4 +80,4 @@ const Product: FC<ProductProps> = (props) => {
   )
 }
 
-export default Product
+export default ProductCard
