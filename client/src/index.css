@@ -7,3 +7,11 @@
 a {
   all: unset;
 }
+
+label {
+  margin-bottom: 4px;
+}
+
+.Fresh-FileInput-description {
+  margin-bottom: 6px;
+}

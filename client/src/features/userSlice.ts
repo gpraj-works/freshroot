@@ -18,8 +18,8 @@ export interface StateProps {
 }
 
 const initialState: StateProps = {
-  user: null,
-  isLoggedIn: false,
+  user: {name: "Pushparaj", email: "gprajutr@gmail.com"},
+  isLoggedIn: true,
   showLogin: false,
   showRegister: false,
   showForgot: false

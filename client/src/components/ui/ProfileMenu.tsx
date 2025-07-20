@@ -1,4 +1,4 @@
-import { Avatar, Button, Divider, Menu } from '@mantine/core'
+import { Anchor, Avatar, Button, Divider, Menu } from '@mantine/core'
 import { type FC } from 'react'
 import { avatar } from '../../assets'
 
@@ -19,8 +19,9 @@ const ProfileMenu: FC<ProfileMenuProps> = (props) => {
         <Avatar src={avatar['f45414cd']} />
       </Menu.Target>
       <Menu.Dropdown>
-        <Menu.Item component="a" href="/orders">
-          Orders
+        <Menu.Item>
+          <Anchor href='/orders' underline="never">Orders</Anchor>
+          
         </Menu.Item>
         <Divider />
         <Menu.Item onClick={props.logout}>Logout</Menu.Item>

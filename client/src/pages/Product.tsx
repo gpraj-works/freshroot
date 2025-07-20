@@ -10,15 +10,19 @@ import {
   Flex,
   Paper,
   Text,
+  Box,
   Rating,
-  List, Button,
-  Anchor
+  List,
+  Button,
+  Anchor,
 } from '@mantine/core'
 import PotatoImage from '../assets/products/potato.png'
 import { type ProductProps } from '../utils/types'
 import { useEffect, useState } from 'react'
 import { getDiscountPercentage, thousandSeparator } from '../utils/helpers'
 import Icon from '../components/shared/Icon'
+import RelatedProducts from '../components/products/RelatedProducts'
+import ProductPreview from '../components/ui/ProductPreview'
 
 const products: ProductProps[] = [
   {
@@ -147,32 +151,52 @@ export default function Product() {
     )
   }
 
+  const thumbnails = Array.from({ length: 9 })
+
   return (
     <Container size="xl" my={20} py={30} mih={450}>
       <Stack mb={30}>
         <Breadcrumbs items={breadcrumbItems} />
       </Stack>
       {product && (
-        <Grid gutter={25} align="start">
-          <GridCol span={5}>
-            <Tabs defaultValue="gallery" orientation="vertical">
-              <Tabs.List>
-                <Tabs.Tab value="gallery" p={0} bd="fresh.2">
-                  <Flex align="center" justify="center">
-                    <Image src={product?.thumbnail} w={100} />
+        <Grid gutter={25} align="start" mb={50}>
+          <GridCol span={5.5}>
+            <Tabs defaultValue="gallery" variant="none" orientation="vertical">
+              <Flex gap={5} align="start">
+                <Stack gap={5}>
+                  {thumbnails.slice(0, 5).map((thumb, index) => (
+                    <Tabs.Tab key={index} value={index === 0 ? 'gallery' : `thumb-${index}`} p={0}>
+                      <Paper withBorder>
+                        <Flex align="center" justify="center">
+                          <Image src={product.thumbnail} w={100} />
+                        </Flex>
+                      </Paper>
+                    </Tabs.Tab>
+                  ))}
+                </Stack>
+
+                <Box>
+                  <Tabs.Panel value="gallery">
+                    <Paper withBorder h={423} w={423}>
+                      <Flex align="center" justify="center" h="100%" w="100%">
+                        <ProductPreview source={product.thumbnail} />
+                      </Flex>
+                    </Paper>
+                  </Tabs.Panel>
+
+                  {/* Extra thumbnails under big image */}
+                  <Flex mt={5} gap={5} wrap="wrap">
+                    {thumbnails.slice(5).map((thumb, index) => (
+                      <Paper key={index + 5} withBorder>
+                        <Image src={product.thumbnail} w={100} />
+                      </Paper>
+                    ))}
                   </Flex>
-                </Tabs.Tab>
-              </Tabs.List>
-              <Tabs.Panel value="gallery">
-                <Paper withBorder h={400} w={400}>
-                  <Flex align="center" justify="center" h="100%" w="100%">
-                    <Image src={product.thumbnail} w={320} />
-                  </Flex>
-                </Paper>
-              </Tabs.Panel>
+                </Box>
+              </Flex>
             </Tabs>
           </GridCol>
-          <GridCol span={5}>
+          <GridCol span={6.5}>
             <Text fw={500} fz={30} mb={6}>
               {product.name}
             </Text>
@@ -187,6 +211,48 @@ export default function Product() {
             <Text fz={13} c="gray.7">
               (Inclusive of all tax)
             </Text>
+            <Flex gap={10} mt={20} h={100}>
+              <Paper withBorder px={15} py={10} radius="md" h="100%">
+                <Stack gap={10}>
+                  <Text fz={15} fw={700} c="fresh.8">
+                    In stock
+                  </Text>
+                  <List spacing={5} size="sm" center>
+                    <List.Item
+                      fz={12}
+                      icon={<Icon name="success_line" color="#438344" size={15} />}
+                    >
+                      Free delivery
+                    </List.Item>
+                    <List.Item
+                      fz={12}
+                      icon={<Icon name="success_line" color="#438344" size={15} />}
+                    >
+                      Return policy
+                    </List.Item>
+                  </List>
+                </Stack>
+              </Paper>
+              <Paper withBorder p={15} radius="md" h="100%">
+                <Text fz={12} mb={4}>
+                  Store address :
+                </Text>
+                <Text fz={11} style={{ wordBreak: 'break-word', maxWidth: 150 }}>
+                  <Anchor fz={11}>Guna vegetables & Fruits</Anchor>
+                </Text>
+                <Text fz={11} style={{ wordBreak: 'break-word', maxWidth: 150 }}>
+                  Chennai - 600001.
+                </Text>
+              </Paper>
+              <Paper withBorder p={15} radius="md" h="100%">
+                <Text fz={12} mb={4}>
+                  Delivery address :
+                </Text>
+                <Text fz={11} style={{ wordBreak: 'break-word', maxWidth: 180 }}>
+                  No 30, Viveganadha Street, Kanchipuram, Tamilnadu, IN.
+                </Text>
+              </Paper>
+            </Flex>
             <Stack my={20}>
               <Text>Product Description</Text>
               <List
@@ -209,28 +275,10 @@ export default function Product() {
               </Button>
             </Flex>
           </GridCol>
-          <GridCol span={2}>
-            <Paper withBorder p={20} radius="md" h="100%">
-              <Stack gap={10} mb={15}>
-                <Text fz={20} fw={700} c="fresh.8">
-                  In stock
-                </Text>
-                <List spacing="xs" size="sm" center>
-                  <List.Item icon={<Icon name="success_line" color="#438344" size={15} />}>
-                    Free delivery
-                  </List.Item>
-                  <List.Item icon={<Icon name="cancel_line" color="red" size={15} />}>
-                    Delivery Charge
-                  </List.Item>
-                </List>
-              </Stack>
-              <Text fz={11}>
-                Store : <Anchor fz={11}>Guna vegetables</Anchor>, Chennai - 600001.
-              </Text>
-            </Paper>
-          </GridCol>
         </Grid>
       )}
+
+      {category && <RelatedProducts category={category} />}
     </Container>
   )
 }

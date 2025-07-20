@@ -1,4 +1,4 @@
-import { RiFacebookCircleLine, RiInstagramLine, RiTwitchLine, RiHome4Line, RiYoutubeLine, RiBarChart2Line, RiMailSendLine, RiDiscountPercentLine, RiTruckLine, RiBankCardLine, RiLockLine, RiReplay10Line, RiArrowRightLine, RiArrowLeftLine, RiSearchLine, RiShoppingCart2Line, RiCheckboxCircleFill, RiCheckboxCircleLine, RiCloseLine, RiAddLine, RiSubtractLine, RiCloseCircleFill, RiDeleteBinLine, RiEdit2Line, RiArrowRightDoubleLine, RiCloseCircleLine, RiStore2Line, RiMapPin2Line } from "@remixicon/react"
+import { RiFacebookCircleLine, RiInstagramLine, RiTwitchLine, RiHome4Line, RiYoutubeLine, RiBarChart2Line, RiMailSendLine, RiDiscountPercentLine, RiTruckLine, RiBankCardLine, RiLockLine, RiReplay10Line, RiArrowRightLine, RiArrowLeftLine, RiSearchLine, RiShoppingCart2Line, RiCheckboxCircleFill, RiCheckboxCircleLine, RiCloseLine, RiAddLine, RiSubtractLine, RiCloseCircleFill, RiDeleteBinLine, RiEdit2Line, RiArrowRightDoubleLine, RiCloseCircleLine, RiStore2Line, RiMapPin2Line, RiMoneyRupeeCircleLine, RiPieChartLine, RiAddCircleLine, RiListCheck3, RiCalendarCheckLine, RiMenu2Line, RiHistoryLine, RiSettingsLine, RiUserLine, RiLogoutCircleRLine, RiUpload2Line } from "@remixicon/react"
 
 const icons = {
   home: RiHome4Line,
@@ -7,6 +7,7 @@ const icons = {
   twitter: RiTwitchLine,
   youtube: RiYoutubeLine,
   bar_chart: RiBarChart2Line,
+  pie_chart: RiPieChartLine,
   email: RiMailSendLine,
   discount: RiDiscountPercentLine,
   delivery: RiTruckLine,
@@ -24,12 +25,22 @@ const icons = {
   error: RiCloseCircleFill,
   close: RiCloseLine,
   add: RiAddLine,
+  add_circle: RiAddCircleLine,
   trash_can: RiDeleteBinLine,
   subtract: RiSubtractLine,
   edit: RiEdit2Line,
   breadcrumb_next: RiArrowRightDoubleLine,
   store: RiStore2Line,
-  location: RiMapPin2Line
+  location: RiMapPin2Line,
+  rupees: RiMoneyRupeeCircleLine,
+  list_check: RiListCheck3,
+  calender_check: RiCalendarCheckLine,
+  history: RiHistoryLine,
+  menu: RiMenu2Line,
+  settings: RiSettingsLine,
+  user: RiUserLine,
+  logout: RiLogoutCircleRLine,
+  upload: RiUpload2Line
 }
 
 export default icons

@@ -8,8 +8,9 @@ import Contact from './pages/Contact'
 import DeliveryAddress from './pages/DeliveryAddress'
 import Home from './pages/Home'
 import NotFound from './pages/NotFound'
-import Products from './pages/Products'
+import Orders from './pages/Orders'
 import Product from './pages/Product'
+import Products from './pages/Products'
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/products/:category/:id" element={<Product />} />
           <Route path="/delivery-address" element={<DeliveryAddress />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/orders" element={<Orders />} />
         </Route>
         <Route path="/seller/*" element={<Store />} />
         <Route path="*" element={<NotFound />} />
