@@ -2,6 +2,7 @@ import nodemailer from "nodemailer"
 import hbs from "nodemailer-express-handlebars"
 import path from "path"
 import dayjs from "dayjs"
+import { HttpError } from "utils/httpError"
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -51,10 +52,28 @@ async function sendEmail(props: SendMailProps) {
       ...props.context
     }
   }
-  const sentResponse = await transporter.sendMail(mailOptions)
-  const isInvalidEmail = sentResponse.rejected.length > 0
-  const messageId = sentResponse.messageId?.replace(/[<>]/g, "") || null
-  return { isInvalidEmail, messageId }
+
+  let isInvalidEmail = false
+  let messageId: string | null = null
+
+  try {
+    await transporter.verify()
+    const sentResponse = await transporter.sendMail(mailOptions)
+    isInvalidEmail = sentResponse.rejected.length > 0
+    messageId = sentResponse.messageId?.replace(/[<>]/g, "") || null
+
+    return { isInvalidEmail, messageId }
+  } catch (error) {
+    const err = error as HttpError
+
+    if (err.message.includes("invalid_grant")) {
+      console.error("nodemailer/sendEmail error: OAuth2 refresh token has been expired!")
+    } else {
+      console.log("nodemailer/sendEmail error:", err)
+    }
+
+    return { isInvalidEmail, messageId }
+  }
 }
 
 export { transporter, sendEmail }
