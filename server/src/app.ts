@@ -6,7 +6,9 @@ import dbConnection from './config/dbConnection'
 import errorHandlerMiddleware from "./middlewares/errorHandlerMiddleware"
 import loggerMiddleware from './middlewares/loggerMiddleware'
 import userRoutes from "./routes/userRoutes"
+import sellerRoutes from "./routes/sellerRoutes"
 import productRoutes from "./routes/productRoutes"
+import adminRoutes from "./routes/adminRoutes"
 
 const app = express()
 const port = process.env.PORT || 3001
@@ -23,7 +25,9 @@ app.get("/", function (request, response) {
 })
 
 app.use("/api/user", userRoutes)
+app.use("/api/seller", sellerRoutes)
 app.use("/api/product", productRoutes)
+app.use("/api/admin", adminRoutes)
 
 app.use(errorHandlerMiddleware)
 
