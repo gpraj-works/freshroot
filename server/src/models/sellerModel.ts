@@ -1,4 +1,5 @@
 import mongoose from "mongoose"
+import { sellerProofs, sellerPaymentMethods, sellerPayoutMethods } from "../utils/helpers"
 
 const sellerSchema = new mongoose.Schema(
   {
@@ -20,20 +21,10 @@ const sellerSchema = new mongoose.Schema(
       required: true
     },
 
-    shop: {
+    store: {
       name: {
         type: String,
         required: true
-      },
-      mobile: {
-        type: Number,
-        required: true,
-        unique: true
-      },
-      email: {
-        type: String,
-        required: true,
-        unique: true
       },
       address: {
         street: {
@@ -64,7 +55,7 @@ const sellerSchema = new mongoose.Schema(
       proof: {
         type: {
           type: String,
-          enum: ["GST", "PAN", "AADHAAR", "EIN"],
+          enum: sellerProofs,
           required: false,
         },
         code: {
@@ -78,7 +69,7 @@ const sellerSchema = new mongoose.Schema(
     payment: {
       primary: {
         type: String,
-        enum: ["UPI", "BANK"],
+        enum: sellerPaymentMethods,
         required: false,
       },
       bank: {
@@ -109,7 +100,7 @@ const sellerSchema = new mongoose.Schema(
 
     payoutType: {
       type: String,
-      enum: ["DAILY", "WEEKLY", "SEMI_WEEK", "MONTHLY"],
+      enum: sellerPayoutMethods,
       required: false,
     },
 
@@ -125,7 +116,8 @@ const sellerSchema = new mongoose.Schema(
     },
 
     ip: {
-      type: String
+      type: String,
+      required: false,
     }
   },
   {

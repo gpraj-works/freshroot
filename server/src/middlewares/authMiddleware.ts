@@ -56,9 +56,7 @@ export function authSeller(request: Request, response: Response, next: NextFunct
       })
     }
 
-    console.log("FESX", tokenInfo)
-
-    request.body = { id: tokenInfo.id }
+    request.body = { ...request.body, id: tokenInfo.id }
     next()
   } catch (error) {
     const err = error as HttpError

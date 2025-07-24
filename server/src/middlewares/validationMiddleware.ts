@@ -1,21 +1,40 @@
 import { Request, Response, NextFunction } from "express"
-import { ZodSchema } from "zod"
+import { ZodSchema, ZodError } from "zod"
 import { StatusCodes } from "http-status-codes"
 
+function formatZodErrors(error: ZodError): Record<string, string[]> {
+  const formatted: Record<string, string[]> = {}
+
+  for (const issue of error.issues) {
+    const path = issue.path.join(".") || "form"
+    if (!formatted[path]) formatted[path] = []
+    formatted[path].push(issue.message)
+  }
+
+  return formatted
+}
+
 export default function validationMiddleware(schema: ZodSchema<any>) {
-  return (req: Request, res: Response, next: NextFunction) => {
-    const result = schema.safeParse(req.body)
+  return (request: Request, response: Response, next: NextFunction) => {
+
+    if (!request.body) {
+      response.status(StatusCodes.BAD_REQUEST).json({
+        message: "Request body missing!"
+      })
+    }
+
+    const result = schema.safeParse(request.body)
 
     if (!result.success) {
-      const errors = result.error.flatten().fieldErrors
+      const errors = formatZodErrors(result.error)
 
-      return res.status(StatusCodes.BAD_REQUEST).json({
+      return response.status(StatusCodes.BAD_REQUEST).json({
         message: "Validation error",
         errors,
       })
     }
 
-    req.body = result.data
+    request.body = result.data
     next()
   }
 }

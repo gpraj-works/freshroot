@@ -26,9 +26,14 @@ sellerRoutes.put("/forgot-password",
   validationMiddleware(validate.forgotPasswordProps),
   sellerController.forgotPassword
 )
-sellerRoutes.put("/reset-password", 
+sellerRoutes.put("/reset-password",
+  validationMiddleware(validate.resetPasswordProps),
   authSeller,
   sellerController.resetPassword
+)
+sellerRoutes.get("/logout",
+  authSeller,
+  sellerController.logout
 )
 sellerRoutes.get("/current-seller",
   authSeller,
