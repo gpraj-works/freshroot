@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import userReducer from './features/userSlice'
 import cartReducer from './features/cartSlice'
+import adminReducer from "./app/admin/features"
 
 const savedCart = localStorage.getItem('cart')
 const preloadedState = {
@@ -11,6 +12,7 @@ const store = configureStore({
   reducer: {
     user: userReducer,
     cart: cartReducer,
+    admin: adminReducer
   },
   preloadedState
 })

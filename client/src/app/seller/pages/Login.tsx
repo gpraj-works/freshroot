@@ -1,34 +1,37 @@
 import {
+  Container,
+  Paper,
+  Image,
+  Flex,
+  Title,
   Anchor,
   Box,
-  Button,
-  Container,
-  Flex,
-  Image,
-  Paper,
   Stack,
-  Text,
   TextInput,
-  Title
+  Group,
+  Checkbox,
+  Button,
 } from '@mantine/core'
-import { useForm } from '@mantine/form'
+import Logo from '../../../assets/logo.svg'
 import { zod4Resolver } from 'mantine-form-zod-resolver'
 import { z } from 'zod/v4'
-import Logo from '../../assets/logo.svg'
+import { useForm } from '@mantine/form'
 
 const validationSchema = z.object({
   email: z.email({ message: 'Please enter valid email' }),
+  password: z.string().min(8, { message: 'Please enter valid password' }),
 })
 
-export default function ForgotPassword() {
+export default function Login() {
   const form = useForm({
     initialValues: {
       email: '',
+      password: '',
     },
     validate: zod4Resolver(validationSchema),
   })
 
-  const handleSubmit = (values: { email: string }) => {
+  const handleSubmit = (values: { email: string; password: string }) => {
     console.log('Submitted', values)
   }
 
@@ -39,7 +42,7 @@ export default function ForgotPassword() {
           <Flex align="center" justify="center" gap={5} mb={10}>
             <Image src={Logo} h={30} w="auto" />
             <Title order={2} c="fresh.8">
-              Forgot Password
+              Seller Login
             </Title>
           </Flex>
           <Box component="form" onSubmit={form.onSubmit(handleSubmit)} mt={10} p={10}>
@@ -50,11 +53,23 @@ export default function ForgotPassword() {
                 key={form.key('email')}
                 {...form.getInputProps('email')}
               />
-              <Button fullWidth>Submit</Button>
-              <Text size="sm" ta="center" mt={5}>
-                Back to login?
-                <Anchor href='/seller/login'> click here</Anchor>
-              </Text>
+              <TextInput
+                type="password"
+                label="Password"
+                placeholder="Secure password"
+                key={form.key('password')}
+                {...form.getInputProps('password')}
+              />
+
+              <Group justify="space-between" mt="md">
+                <Checkbox label="Remember me" />
+                <Anchor href='/seller/forgot-password' size="sm">
+                  Forgot password?
+                </Anchor>
+              </Group>
+              <Button fullWidth mt="md">
+                Login
+              </Button>
             </Stack>
           </Box>
         </Paper>

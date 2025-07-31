@@ -7,18 +7,17 @@ import {
   TextInput,
   Grid,
   Select,
-  Flex,
   FileInput,
   Paper,
 } from '@mantine/core'
-import Breadcrumbs from '../../components/ui/Breadcrumbs'
+import Breadcrumbs from '../../../components/ui/Breadcrumbs'
 import { zod4Resolver } from 'mantine-form-zod-resolver'
 import { z } from 'zod/v4'
 import { useForm } from '@mantine/form'
 import { useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import { RichTextEditor } from '@mantine/tiptap'
-import Icon from '../../components/shared/Icon'
+import Icon from '../../../components/shared/Icon'
 
 const validationSchema = z.object({
   email: z.email({ message: 'Please enter valid email' }),

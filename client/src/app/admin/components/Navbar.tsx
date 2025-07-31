@@ -1,8 +1,8 @@
 import { Paper, Flex, Stack, Image, Tooltip, Anchor, Box } from '@mantine/core'
 import { type FC } from 'react'
-import { type IconName } from '../../components/shared/Icon'
-import Icon from '../../components/shared/Icon'
-import { Logo } from '../../assets'
+import { type IconName } from '../../../components/shared/Icon'
+import Icon from '../../../components/shared/Icon'
+import { Logo } from '../../../assets'
 import { useViewportSize } from '@mantine/hooks'
 
 interface NavbarLinkProps {

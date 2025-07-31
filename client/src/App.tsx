@@ -1,8 +1,9 @@
 import { Box } from '@mantine/core'
 import { Route, Routes } from 'react-router-dom'
 import './App.css'
+import Seller from './layouts/Seller'
 import Store from './layouts/Store'
-import StoreFront from './layouts/Storefront'
+import Admin from './layouts/Admin'
 import Cart from './pages/Cart'
 import Contact from './pages/Contact'
 import DeliveryAddress from './pages/DeliveryAddress'
@@ -16,7 +17,7 @@ function App() {
   return (
     <Box>
       <Routes>
-        <Route element={<StoreFront />}>
+        <Route element={<Store />}>
           <Route index element={<Home />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/products" element={<Products />} />
@@ -26,7 +27,8 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/orders" element={<Orders />} />
         </Route>
-        <Route path="/seller/*" element={<Store />} />
+        <Route path="/seller/*" element={<Seller />} />
+        <Route path="/admin/*" element={<Admin />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Box>
