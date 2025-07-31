@@ -67,3 +67,35 @@ export function authSeller(request: Request, response: Response, next: NextFunct
     })
   }
 }
+
+export function authAdmin(request: Request, response: Response, next: NextFunction) {
+  try {
+    const token = request.cookies.adminToken
+
+    if (!token) {
+      return response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        message: "Not logged in. Please login and try again!"
+      })
+    }
+
+    const tokenSecret = process.env.TOKEN_SECRET as string
+    const tokenInfo = jwt.verify(token, tokenSecret) as JwtPayload
+    const isExpired = dayjs().isAfter(dayjs.unix(tokenInfo.exp as number))
+
+    if (isExpired) {
+      return response.status(StatusCodes.UNAUTHORIZED).json({
+        message: "Login expired. Please login again!"
+      })
+    }
+
+    request.body = { ...request.body, id: tokenInfo.id }
+    next()
+  } catch (error) {
+    const err = error as HttpError
+    console.error("authMiddleware/authAdmin error:", err)
+
+    return response.status(err.status || StatusCodes.INTERNAL_SERVER_ERROR).json({
+      message: err.message || "Unable to authenticate. try again!"
+    })
+  }
+}

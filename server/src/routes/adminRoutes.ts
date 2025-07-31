@@ -1,12 +1,22 @@
 import { Router } from "express"
-import * as productController from "../controllers/productController"
+import * as adminController from "../controllers/adminController"
+import * as validate from "../validations/adminValidator"
+import validationMiddleware from "../middlewares/validationMiddleware"
+import { authAdmin } from "../middlewares/authMiddleware"
 
 const adminRoutes = Router()
 
-adminRoutes.post("/login", () => { })
+adminRoutes.post("/login",
+  validationMiddleware(validate.loginProps),
+  adminController.login
+)
 
+adminRoutes.post("/category",
+  authAdmin,
+  validationMiddleware(validate.addCategoryProps),
+  adminController.addCategory
+)
 adminRoutes.get("/category", () => { })
-adminRoutes.post("/category", () => { })
 adminRoutes.put("/category", () => { })
 adminRoutes.delete("/category/:id", () => { })
 
