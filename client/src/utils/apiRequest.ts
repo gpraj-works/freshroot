@@ -13,7 +13,11 @@ export const axiosInstance = axios.create({
   },
 })
 
-export const getRequest = (url: string) => axiosInstance.get(url).then(res => res.data)
+export const getRequest = (url: string) => axiosInstance.get(url).then(response => response.data)
+
+export const postRequest = async (url: string, { arg }: { arg: unknown }) => {
+  return await axiosInstance.post(url, arg).then(response => response.data)
+}
 
 export const SWREventConfig: SWRConfiguration = {
   fetcher: getRequest,

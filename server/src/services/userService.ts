@@ -13,10 +13,10 @@ export async function register(payload: { name: string, email: string, password:
   const isVerifiedUser = Boolean(existingUser?.verified)
 
   if (existingUser && isVerifiedUser) {
-    throw new HttpError(
-      StatusCodes.CONFLICT,
-      "User already exists"
-    )
+    throw new HttpError({
+      status: StatusCodes.CONFLICT,
+      message: "User already exists",
+    })
   }
 
   const hashedPassword = await bcrypt.hash(payload.password, 10)
@@ -36,17 +36,17 @@ export async function register(payload: { name: string, email: string, password:
   })
 
   if (!sendEmailResponse.messageId) {
-    throw new HttpError(
-      StatusCodes.CONFLICT,
-      "Unable to sent verification email"
-    )
+    throw new HttpError({
+      status: StatusCodes.CONFLICT,
+      message: "Unable to send verification email",
+    })
   }
 
   if (sendEmailResponse.isInvalidEmail) {
-    throw new HttpError(
-      StatusCodes.BAD_REQUEST,
-      "Given email is invalid"
-    )
+    throw new HttpError({
+      status: StatusCodes.BAD_REQUEST,
+      message: "Given email is invalid",
+    })
   }
 
   if (existingUser && !isVerifiedUser) {
@@ -72,19 +72,19 @@ export async function login(payload: { email: string, password: string }): Promi
   const user = await User.findOne({ email: payload.email })
 
   if (!user) {
-    throw new HttpError(
-      StatusCodes.NOT_FOUND,
-      "User not found in given email"
-    )
+    throw new HttpError({
+      status: StatusCodes.UNAUTHORIZED,
+      message: "User not found in given email",
+    })
   }
 
   const isPasswordMatched = await bcrypt.compare(payload.password, user.password)
 
   if (!isPasswordMatched) {
-    throw new HttpError(
-      StatusCodes.FORBIDDEN,
-      "Given password is invalid"
-    )
+    throw new HttpError({
+      status: StatusCodes.FORBIDDEN,
+      message: "Given password is invalid",
+    })
   }
 
   return jwt.sign({ id: user._id }, process.env.TOKEN_SECRET as string, { expiresIn: "7d" })
@@ -94,10 +94,10 @@ export async function proceedForgotPassword(payload: { email: string }) {
   const user = await User.findOne({ email: payload.email })
 
   if (!user) {
-    throw new HttpError(
-      StatusCodes.NOT_FOUND,
-      "User not found in given email"
-    )
+    throw new HttpError({
+      status: StatusCodes.UNAUTHORIZED,
+      message: "User not found in given email",
+    })
   }
 
   const oneTimePassword = getOneTimePassword()
@@ -116,10 +116,10 @@ export async function proceedForgotPassword(payload: { email: string }) {
   })
 
   if (!sendEmailResponse.messageId) {
-    throw new HttpError(
-      StatusCodes.CONFLICT,
-      "Unable to process forgot password"
-    )
+    throw new HttpError({
+      status: StatusCodes.CONFLICT,
+      message: "Unable to process forgot password",
+    })
   }
 
   user.otp = oneTimePassword
@@ -132,27 +132,27 @@ export async function forgotPassword(payload: { email: string, otp: string, pass
   const user = await User.findOne({ email: payload.email })
 
   if (!user) {
-    throw new HttpError(
-      StatusCodes.NOT_FOUND,
-      "User not found in given email"
-    )
+    throw new HttpError({
+      status: StatusCodes.UNAUTHORIZED,
+      message: "User not found in given email",
+    })
   }
 
   const isValidOTP = payload.otp === user.otp
   const isExpired = dayjs().isAfter(user.otpExpiry)
 
   if (!isValidOTP) {
-    throw new HttpError(
-      StatusCodes.BAD_REQUEST,
-      "Given OTP is invalid"
-    )
+    throw new HttpError({
+      status: StatusCodes.BAD_REQUEST,
+      message: "Given OTP is invalid",
+    })
   }
 
   if (isExpired) {
-    throw new HttpError(
-      StatusCodes.BAD_REQUEST,
-      "OTP is already expired"
-    )
+    throw new HttpError({
+      status: StatusCodes.BAD_REQUEST,
+      message: "OTP is already expired",
+    })
   }
 
   user.password = await bcrypt.hash(payload.password, 10)
@@ -166,27 +166,27 @@ export async function emailVerification(payload: { email: string, otp: string })
   const user = await User.findOne({ email: payload.email })
 
   if (!user) {
-    throw new HttpError(
-      StatusCodes.NOT_FOUND,
-      "User not found in given email"
-    )
+    throw new HttpError({
+      status: StatusCodes.UNAUTHORIZED,
+      message: "User not found in given email",
+    })
   }
 
   const isValidOTP = payload.otp === user.otp
   const isExpired = dayjs().isAfter(user.otpExpiry)
 
   if (!isValidOTP) {
-    throw new HttpError(
-      StatusCodes.BAD_REQUEST,
-      "Given OTP is invalid"
-    )
+    throw new HttpError({
+      status: StatusCodes.BAD_REQUEST,
+      message: "Given OTP is invalid",
+    })
   }
 
   if (isExpired) {
-    throw new HttpError(
-      StatusCodes.BAD_REQUEST,
-      "OTP is already expired"
-    )
+    throw new HttpError({
+      status: StatusCodes.BAD_REQUEST,
+      message: "OTP is already expired",
+    })
   }
 
   user.verified = true
@@ -200,10 +200,10 @@ export async function getCurrentUser(payload: { id: string }) {
   const user = await User.findOne({ _id: payload.id }).select("-password")
 
   if (!user) {
-    throw new HttpError(
-      StatusCodes.BAD_REQUEST,
-      "Requested user not found!"
-    )
+    throw new HttpError({
+      status: StatusCodes.BAD_REQUEST,
+      message: "Requested user not found!",
+    })
   }
 
   return user

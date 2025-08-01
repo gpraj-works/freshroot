@@ -16,14 +16,16 @@ export async function login(request: Request, response: Response): Promise<Respo
     })
 
     return response.status(StatusCodes.OK).json({
-      message: "Logged in successfully!"
+      status: true,
+      message: "Logged in successfully!",
     })
   } catch (error) {
     const err = error as HttpError
     console.error("adminController/login error:", err.message)
 
     return response.status(err.status || StatusCodes.INTERNAL_SERVER_ERROR).json({
-      message: err.message || "Unable to login. Please try again!"
+      message: err.message || "Unable to login. Please try again!",
+      errorField: err.errorField
     })
   }
 }
@@ -40,7 +42,8 @@ export async function addCategory(request: Request, response: Response): Promise
     console.error("adminController/addCategory error:", err)
 
     return response.status(err.status || StatusCodes.INTERNAL_SERVER_ERROR).json({
-      message: err.message || "Unable to add category. try again!"
+      message: err.message || "Unable to add category. try again!",
+      errorField: err.errorField
     })
   }
 }

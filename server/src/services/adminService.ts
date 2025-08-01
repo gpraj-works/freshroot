@@ -15,17 +15,20 @@ export async function login(payload: { loginId: string, password: string }): Pro
   const admin = await Admin.findOne({ loginId: payload.loginId })
 
   if (!admin) {
-    throw new HttpError(
-      StatusCodes.NOT_FOUND,
-      "Admin not found"
-    )
+    throw new HttpError({
+      status: StatusCodes.UNAUTHORIZED,
+      message: "Admin not found with this login id",
+      errorField: "loginId",
+    })
   }
 
+
   if (payload.password !== admin.password) {
-    throw new HttpError(
-      StatusCodes.FORBIDDEN,
-      "Given password is invalid"
-    )
+    throw new HttpError({
+      status: StatusCodes.FORBIDDEN,
+      message: "Given password is invalid",
+      errorField: "password"
+    })
   }
 
   return jwt.sign({ id: admin._id }, process.env.TOKEN_SECRET as string, { expiresIn: "2d" })
@@ -38,17 +41,17 @@ export async function addCategory(payload: CategoryProps): Promise<void> {
   ])
 
   if (codeExists) {
-    throw new HttpError(
-      StatusCodes.CONFLICT,
-      "Category code already exists"
-    )
+    throw new HttpError({
+      status: StatusCodes.CONFLICT,
+      message: "Category code already exists"
+    })
   }
 
   if (nameExists) {
-    throw new HttpError(
-      StatusCodes.CONFLICT,
-      "Category name already exists"
-    )
+    throw new HttpError({
+      status: StatusCodes.CONFLICT,
+      message: "Category name already exists"
+    })
   }
 
   await Category.create(payload)

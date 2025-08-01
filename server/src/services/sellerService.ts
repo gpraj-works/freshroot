@@ -24,10 +24,10 @@ export async function register(payload: Register): Promise<{ isUpdated: boolean 
   const isVerifiedSeller = Boolean(existingSeller?.verified)
 
   if (existingSeller && isVerifiedSeller) {
-    throw new HttpError(
-      StatusCodes.CONFLICT,
-      "Seller already exists"
-    )
+    throw new HttpError({
+      status: StatusCodes.CONFLICT,
+      message: "Seller already exists"
+    })
   }
 
   const hashedPassword = await bcrypt.hash(payload.password, 10)
@@ -47,18 +47,20 @@ export async function register(payload: Register): Promise<{ isUpdated: boolean 
   })
 
   if (!sendEmailResponse.messageId) {
-    throw new HttpError(
-      StatusCodes.CONFLICT,
-      "Unable to sent verification email"
-    )
+    throw new HttpError({
+      status: StatusCodes.CONFLICT,
+      message: "Unable to send verification email",
+    })
   }
 
   if (sendEmailResponse.isInvalidEmail) {
-    throw new HttpError(
-      StatusCodes.BAD_REQUEST,
-      "Given email is invalid"
-    )
+    throw new HttpError({
+      status: StatusCodes.BAD_REQUEST,
+      message: "Given email is invalid",
+      errorField: "email",
+    })
   }
+
 
   if (existingSeller && !isVerifiedSeller) {
     existingSeller.otp = oneTimePassword
@@ -85,27 +87,27 @@ export async function emailVerification(payload: { email: string, otp: string })
   const seller = await Seller.findOne({ email: payload.email })
 
   if (!seller) {
-    throw new HttpError(
-      StatusCodes.NOT_FOUND,
-      "Seller not found in given email"
-    )
+    throw new HttpError({
+      status: StatusCodes.UNAUTHORIZED,
+      message: "Seller not found in given email",
+    })
   }
 
   const isValidOTP = payload.otp === seller.otp
   const isExpired = dayjs().isAfter(seller.otpExpiry)
 
   if (!isValidOTP) {
-    throw new HttpError(
-      StatusCodes.BAD_REQUEST,
-      "Given OTP is invalid"
-    )
+    throw new HttpError({
+      status: StatusCodes.BAD_REQUEST,
+      message: "Given OTP is invalid",
+    })
   }
 
   if (isExpired) {
-    throw new HttpError(
-      StatusCodes.BAD_REQUEST,
-      "OTP is already expired"
-    )
+    throw new HttpError({
+      status: StatusCodes.BAD_REQUEST,
+      message: "OTP is already expired",
+    })
   }
 
   seller.verified = true
@@ -119,10 +121,10 @@ export async function proceedForgotPassword(payload: { email: string }) {
   const seller = await Seller.findOne({ email: payload.email })
 
   if (!seller) {
-    throw new HttpError(
-      StatusCodes.NOT_FOUND,
-      "Seller not found in given email"
-    )
+    throw new HttpError({
+      status: StatusCodes.UNAUTHORIZED,
+      message: "Seller not found in given email",
+    })
   }
 
   const oneTimePassword = getOneTimePassword()
@@ -141,10 +143,10 @@ export async function proceedForgotPassword(payload: { email: string }) {
   })
 
   if (!sendEmailResponse.messageId) {
-    throw new HttpError(
-      StatusCodes.CONFLICT,
-      "Unable to process forgot password"
-    )
+    throw new HttpError({
+      status: StatusCodes.CONFLICT,
+      message: "Unable to process forgot password",
+    })
   }
 
   seller.otp = oneTimePassword
@@ -157,27 +159,27 @@ export async function forgotPassword(payload: { email: string, otp: string, pass
   const seller = await Seller.findOne({ email: payload.email })
 
   if (!seller) {
-    throw new HttpError(
-      StatusCodes.NOT_FOUND,
-      "Seller not found in given email"
-    )
+    throw new HttpError({
+      status: StatusCodes.UNAUTHORIZED,
+      message: "Seller not found in given email",
+    })
   }
 
   const isValidOTP = payload.otp === seller.otp
   const isExpired = dayjs().isAfter(seller.otpExpiry)
 
   if (!isValidOTP) {
-    throw new HttpError(
-      StatusCodes.BAD_REQUEST,
-      "Given OTP is invalid"
-    )
+    throw new HttpError({
+      status: StatusCodes.BAD_REQUEST,
+      message: "Given OTP is invalid",
+    })
   }
 
   if (isExpired) {
-    throw new HttpError(
-      StatusCodes.BAD_REQUEST,
-      "OTP is already expired"
-    )
+    throw new HttpError({
+      status: StatusCodes.BAD_REQUEST,
+      message: "OTP is already expired",
+    })
   }
 
   seller.password = await bcrypt.hash(payload.password, 10)
@@ -193,19 +195,19 @@ export async function resetPassword(payload: { id: string, currentPassword: stri
   const isCurrentPasswordMatched = await bcrypt.compare(payload.currentPassword, seller.password)
 
   if (!isCurrentPasswordMatched) {
-    throw new HttpError(
-      StatusCodes.BAD_REQUEST,
-      "Invalid current password."
-    )
+    throw new HttpError({
+      status: StatusCodes.BAD_REQUEST,
+      message: "Invalid current password.",
+    })
   }
 
   const isMatchedWithExisting = await bcrypt.compare(payload.changedPassword, seller.password)
 
   if (isMatchedWithExisting) {
-    throw new HttpError(
-      StatusCodes.BAD_REQUEST,
-      "New password is matching with existing. try another."
-    )
+    throw new HttpError({
+      status: StatusCodes.BAD_REQUEST,
+      message: "New password is matching with existing. try another.",
+    })
   }
 
   seller.password = await bcrypt.hash(payload.changedPassword, 10)
@@ -216,19 +218,19 @@ export async function login(payload: { email: string, password: string }): Promi
   const seller = await Seller.findOne({ email: payload.email })
 
   if (!seller) {
-    throw new HttpError(
-      StatusCodes.NOT_FOUND,
-      "Seller not found in given email"
-    )
+    throw new HttpError({
+      status: StatusCodes.UNAUTHORIZED,
+      message: "Seller not found in given email",
+    })
   }
 
   const isPasswordMatched = await bcrypt.compare(payload.password, seller.password)
 
   if (!isPasswordMatched) {
-    throw new HttpError(
-      StatusCodes.FORBIDDEN,
-      "Given password is invalid"
-    )
+    throw new HttpError({
+      status: StatusCodes.FORBIDDEN,
+      message: "Given password is invalid",
+    })
   }
 
   return jwt.sign({ id: seller._id }, process.env.TOKEN_SECRET as string, { expiresIn: "7d" })
@@ -238,10 +240,10 @@ export async function getCurrentSeller(payload: { id: string }) {
   const seller = await Seller.findOne({ _id: payload.id }).select("-password -store.proof")
 
   if (!seller) {
-    throw new HttpError(
-      StatusCodes.BAD_REQUEST,
-      "Requested seller not found!"
-    )
+    throw new HttpError({
+      status: StatusCodes.BAD_REQUEST,
+      message: "Requested seller not found!",
+    })
   }
 
   return seller
